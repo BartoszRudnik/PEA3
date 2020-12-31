@@ -1,13 +1,14 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
 
     public static void main(String [] args){
 
         DataReader reader = new DataReader();
-        UtilsFunction utils = new UtilsFunction();
+        Genetic genetic = new Genetic();
 
         int [][] graph;
-        int [] result;
-        boolean [] test;
         int numberOfVertex;
 
         reader.readData2("ftv33.atsp");
@@ -15,35 +16,21 @@ public class Main {
         graph = reader.getGraph();
         numberOfVertex = reader.getV();
 
-        utils.setNumberOfVertex(numberOfVertex);
-        test = new boolean[numberOfVertex];
+        genetic.generatePopulation(graph, numberOfVertex, 100, 0);
 
-        result = utils.greedy(graph);
+        List<int[]> population = genetic.getPopulation();
 
-        for(int i = 0; i < result.length; i++) {
+        for(int i = 0; i < population.size(); i++){
 
-            if(test[result[i]])
-                System.out.print("bla");
+            int [] route = population.get(i);
 
-            test[result[i]] = true;
+            for(int j = 0; j < route.length; j++){
 
-            System.out.print(result[i] + " ");
+                System.out.print(route[j] + " ");
 
-        }
+            }
 
-        System.out.println();
-
-        result = utils.randomGreedy(graph, numberOfVertex / 2);
-        test = new boolean[numberOfVertex];
-
-        for(int i = 0; i < result.length; i++) {
-
-            if(test[result[i]])
-                System.out.print("bla");
-
-            test[result[i]] = true;
-
-            System.out.print(result[i] + " ");
+            System.out.println();
 
         }
 
