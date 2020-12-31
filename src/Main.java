@@ -33,7 +33,7 @@ public class Main {
 
         System.out.println();
 
-        genetic.sortPopulation();
+        genetic.sortPopulation(population);
 
         for (int[] route : population) {
 
@@ -76,6 +76,37 @@ public class Main {
             System.out.println();
 
         }
+
+        System.out.println();
+        int [] firstParent = genetic.tournamentSelection(numberOfVertex, 10, 5);
+
+        for(int i : firstParent){
+
+            System.out.print(i + " ");
+
+        }
+        System.out.println();
+
+        System.out.println();
+        firstParent = genetic.rankingSelection(10);
+
+        for(int i : firstParent){
+
+            System.out.print(i + " ");
+
+        }
+        System.out.println();
+
+        System.out.println();
+        firstParent = genetic.rouletteSelection(10);
+
+        for(int i : firstParent){
+
+            System.out.print(i + " ");
+
+        }
+        System.out.println();
+
 
     }
 
