@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -16,9 +15,61 @@ public class Main {
         graph = reader.getGraph();
         numberOfVertex = reader.getV();
 
-        genetic.generatePopulation(graph, numberOfVertex, 100, 0);
-
         List<int[]> population = genetic.getPopulation();
+
+        genetic.generatePopulation(graph, numberOfVertex, 10, 0);
+
+        for(int i = 0; i < population.size(); i++){
+
+            int [] route = population.get(i);
+
+            for(int j = 0; j < route.length; j++){
+
+                System.out.print(route[j] + " ");
+
+            }
+
+            System.out.println();
+
+        }
+
+        System.out.println();
+
+        genetic.sortPopulation();
+
+        for(int i = 0; i < population.size(); i++){
+
+            int [] route = population.get(i);
+
+            for(int j = 0; j < route.length; j++){
+
+                System.out.print(route[j] + " ");
+
+            }
+
+            System.out.println();
+
+        }
+
+        System.out.println();
+        genetic.clearPopulation(10, 3);
+
+        for(int i = 0; i < population.size(); i++){
+
+            int [] route = population.get(i);
+
+            for(int j = 0; j < route.length; j++){
+
+                System.out.print(route[j] + " ");
+
+            }
+
+            System.out.println();
+
+        }
+
+        System.out.println();
+        genetic.generatePopulation(graph, numberOfVertex, 10, 3);
 
         for(int i = 0; i < population.size(); i++){
 

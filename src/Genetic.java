@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -9,6 +10,8 @@ public class Genetic {
     private List<int[]> population;
 
     public Genetic(){
+
+        population = new ArrayList<>();
 
     }
 
@@ -23,7 +26,6 @@ public class Genetic {
     public void generatePopulation(int [][] graph, int numberOfVertex, int populationSize, int exclusivity){
 
         utils.setNumberOfVertex(numberOfVertex);
-        population = new ArrayList<>();
         Random random = new Random();
 
         int routeCost;
@@ -37,7 +39,7 @@ public class Genetic {
 
         population.add(route);
 
-        int rGreedySize = (populationSize / 5) * 4;
+        int rGreedySize = ((populationSize - exclusivity) / 5) * 4;
 
         for(int i = 0; i < rGreedySize; i++){
 
@@ -54,7 +56,7 @@ public class Genetic {
 
         }
 
-        int randomSize = populationSize - rGreedySize - 1;
+        int randomSize = populationSize - exclusivity - rGreedySize - 1;
 
         for(int i = 0; i < randomSize; i++){
 
@@ -67,6 +69,20 @@ public class Genetic {
 
             population.add(route);
 
+        }
+
+    }
+
+    public void sortPopulation(){
+        population.sort(Comparator.comparingInt(o -> o[o.length - 1]));
+    }
+
+    public void clearPopulation(int populationSize, int exclusivity){
+
+        sortPopulation();
+
+        if (populationSize > exclusivity) {
+            population.subList(exclusivity, populationSize).clear();
         }
 
     }
