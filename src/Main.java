@@ -19,13 +19,11 @@ public class Main {
 
         genetic.generatePopulation(graph, numberOfVertex, 10, 0);
 
-        for(int i = 0; i < population.size(); i++){
+        for (int[] route : population) {
 
-            int [] route = population.get(i);
+            for (int i : route) {
 
-            for(int j = 0; j < route.length; j++){
-
-                System.out.print(route[j] + " ");
+                System.out.print(i + " ");
 
             }
 
@@ -37,13 +35,11 @@ public class Main {
 
         genetic.sortPopulation();
 
-        for(int i = 0; i < population.size(); i++){
+        for (int[] route : population) {
 
-            int [] route = population.get(i);
+            for (int i : route) {
 
-            for(int j = 0; j < route.length; j++){
-
-                System.out.print(route[j] + " ");
+                System.out.print(i + " ");
 
             }
 
@@ -54,13 +50,11 @@ public class Main {
         System.out.println();
         genetic.clearPopulation(10, 3);
 
-        for(int i = 0; i < population.size(); i++){
+        for (int[] route : population) {
 
-            int [] route = population.get(i);
+            for (int i : route) {
 
-            for(int j = 0; j < route.length; j++){
-
-                System.out.print(route[j] + " ");
+                System.out.print(i + " ");
 
             }
 
@@ -71,13 +65,11 @@ public class Main {
         System.out.println();
         genetic.generatePopulation(graph, numberOfVertex, 10, 3);
 
-        for(int i = 0; i < population.size(); i++){
+        for (int[] route : population) {
 
-            int [] route = population.get(i);
+            for (int i : route) {
 
-            for(int j = 0; j < route.length; j++){
-
-                System.out.print(route[j] + " ");
+                System.out.print(i + " ");
 
             }
 
