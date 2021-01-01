@@ -17,7 +17,7 @@ public class Main {
 
         List<int[]> population = genetic.getPopulation();
 
-        genetic.generatePopulation(graph, numberOfVertex, 10, 0);
+        genetic.generatePopulation(graph, numberOfVertex, 10);
 
         for (int[] route : population) {
 
@@ -33,80 +33,37 @@ public class Main {
 
         System.out.println();
 
-        genetic.sortPopulation(population);
+        int [] firstParent = genetic.tournamentSelection(numberOfVertex, 10, 2);
+        int [] secondParent = genetic.tournamentSelection(numberOfVertex, 10, 2);
 
-        for (int[] route : population) {
-
-            for (int i : route) {
-
-                System.out.print(i + " ");
-
-            }
-
-            System.out.println();
-
-        }
+        for(int i : firstParent)
+            System.out.print(i + " ");
 
         System.out.println();
-        genetic.clearPopulation(10, 3);
 
-        for (int[] route : population) {
-
-            for (int i : route) {
-
-                System.out.print(i + " ");
-
-            }
-
-            System.out.println();
-
-        }
+        for(int i : secondParent)
+            System.out.print(i + " ");
 
         System.out.println();
-        genetic.generatePopulation(graph, numberOfVertex, 10, 3);
 
-        for (int[] route : population) {
+        int [] child = genetic.orderCrossover(graph, firstParent, secondParent, numberOfVertex);
 
-            for (int i : route) {
+        boolean [] test = new boolean[child.length];
 
-                System.out.print(i + " ");
-
-            }
-
-            System.out.println();
-
-        }
-
-        System.out.println();
-        int [] firstParent = genetic.tournamentSelection(numberOfVertex, 10, 5);
-
-        for(int i : firstParent){
+        for(int i : child) {
 
             System.out.print(i + " ");
 
-        }
-        System.out.println();
+            if(i < test.length) {
 
-        System.out.println();
-        firstParent = genetic.rankingSelection(10);
+                if (test[i])
+                    System.out.print("blad ");
 
-        for(int i : firstParent){
+                test[i] = true;
 
-            System.out.print(i + " ");
-
-        }
-        System.out.println();
-
-        System.out.println();
-        firstParent = genetic.rouletteSelection(10);
-
-        for(int i : firstParent){
-
-            System.out.print(i + " ");
+            }
 
         }
-        System.out.println();
-
 
     }
 

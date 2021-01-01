@@ -23,7 +23,7 @@ public class Genetic {
         this.population = population;
     }
 
-    public void generatePopulation(int [][] graph, int numberOfVertex, int populationSize, int exclusivity){
+    public void generatePopulation(int [][] graph, int numberOfVertex, int populationSize){
 
         utils.setNumberOfVertex(numberOfVertex);
         Random random = new Random();
@@ -39,7 +39,7 @@ public class Genetic {
 
         population.add(route);
 
-        int rGreedySize = ((populationSize - exclusivity) / 5) * 4;
+        int rGreedySize = (populationSize / 5) * 4;
 
         for(int i = 0; i < rGreedySize; i++){
 
@@ -56,7 +56,7 @@ public class Genetic {
 
         }
 
-        int randomSize = populationSize - exclusivity - rGreedySize - 1;
+        int randomSize = populationSize - rGreedySize - 1;
 
         for(int i = 0; i < randomSize; i++){
 
@@ -213,6 +213,163 @@ public class Genetic {
         }
 
         return  tmpPopulation.get(returnIndex);
+
+    }
+
+    public int [] twoPointCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+
+        int [] child = new int[firstParent.length];
+
+        Random random = new Random();
+        int i = 0;
+        int j = 0;
+
+        while(i == j) {
+
+            i = random.nextInt(numberOfVertex - 2) + 1;
+            j = random.nextInt(numberOfVertex - 2) + 1;
+
+        }
+
+        if(j > i){
+
+            int tmp = i;
+            i = j;
+            j = tmp;
+
+        }
+
+        int [] chosenVertexes = new int[i - j + 1];
+        int tmpIndex = 0;
+
+        for(int start = j; start <= i; start++) {
+
+            chosenVertexes[tmpIndex] = firstParent[start];
+            tmpIndex++;
+
+        }
+
+        tmpIndex = 0;
+
+        for(int start = 0; start < firstParent.length - 2; start++){
+
+            boolean add = true;
+            int tmp = secondParent[start];
+
+            for(int k = 0; k < chosenVertexes.length; k++)
+                if(tmp == chosenVertexes[k])
+                    add = false;
+
+            if(add) {
+                child[tmpIndex] = tmp;
+                tmpIndex++;
+            }
+
+        }
+
+        int tmpIndex2 = chosenVertexes.length - 1;
+
+        for(int start = tmpIndex; start < firstParent.length - 2; start++){
+
+            child[start] = chosenVertexes[tmpIndex2];
+            tmpIndex2--;
+
+        }
+
+        child[child.length - 2] = 0;
+        child[child.length - 1] = utils.getRouteCost(graph, child);
+
+        return child;
+
+    }
+
+    public int [] orderCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+
+        int [] child = new int[numberOfVertex + 2];
+
+        Random random = new Random();
+        int i = 0;
+        int j = 0;
+
+        while(i == j) {
+
+            i = random.nextInt(numberOfVertex - 2) + 1;
+            j = random.nextInt(numberOfVertex - 2) + 1;
+
+        }
+
+        if(j > i){
+
+            int tmp = i;
+            i = j;
+            j = tmp;
+
+        }
+
+        int [] chosenVertexes = new int[i - j + 1];
+        int tmpIndex = 0;
+
+        for(int start = j; start <= i; start++) {
+
+            chosenVertexes[tmpIndex] = firstParent[start];
+            tmpIndex++;
+
+        }
+
+        tmpIndex = i + 1;
+        int tmpIndex2 = i + 1;
+
+        for(int k = 0; k < secondParent.length; k++){
+
+            int tmpVertex = secondParent[tmpIndex2];
+            boolean test = true;
+
+            for (int chosenVertex : chosenVertexes) {
+
+                if (tmpVertex == chosenVertex) {
+                    test = false;
+                    break;
+                }
+
+            }
+
+            if(test) {
+                child[tmpIndex] = tmpVertex;
+                tmpIndex++;
+            }
+
+            tmpIndex2++;
+
+            if(tmpIndex == secondParent.length - 2)
+                tmpIndex = 1;
+
+            if(tmpIndex2 == secondParent.length - 2)
+                tmpIndex2 = 1;
+
+        }
+
+        tmpIndex2 = 0;
+
+        for(int k = j; k <= i; k++) {
+
+            child[k] = chosenVertexes[tmpIndex2];
+            tmpIndex2++;
+
+        }
+
+        child[0] = 0;
+        child[child.length - 2] = 0;
+        child[child.length - 1] = utils.getRouteCost(graph, child);
+
+        return child;
+
+    }
+
+    public int [] partiallyMappedCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+
+        int [] child = new int[numberOfVertex + 2];
+
+        return  child;
 
     }
 
