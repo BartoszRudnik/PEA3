@@ -256,9 +256,11 @@ public class Genetic {
             boolean add = true;
             int tmp = secondParent[start];
 
-            for(int k = 0; k < chosenVertexes.length; k++)
-                if(tmp == chosenVertexes[k])
+            for (int chosenVertex : chosenVertexes)
+                if (tmp == chosenVertex) {
                     add = false;
+                    break;
+                }
 
             if(add) {
                 child[tmpIndex] = tmp;
@@ -368,6 +370,93 @@ public class Genetic {
     public int [] partiallyMappedCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
 
         int [] child = new int[numberOfVertex + 2];
+
+        Random random = new Random();
+        int i = 0;
+        int j = 0;
+
+        while(i == j) {
+
+            i = random.nextInt(numberOfVertex - 2) + 1;
+            j = random.nextInt(numberOfVertex - 2) + 1;
+
+        }
+
+        if(j > i){
+
+            int tmp = i;
+            i = j;
+            j = tmp;
+
+        }
+
+        int [] chosenVertexes = new int[i - j + 1];
+        int tmpIndex = 0;
+
+        for(int k = j;  k <= i; k++){
+
+            chosenVertexes[tmpIndex] = secondParent[k];
+            child[k] = secondParent[k];
+            tmpIndex++;
+
+        }
+
+        for(int k = 1; k < numberOfVertex; k++){
+
+            boolean test = true;
+
+            for(int chosenVertex : chosenVertexes){
+
+                if(firstParent[k] == chosenVertex) {
+
+                    test = false;
+                    break;
+
+                }
+
+            }
+
+            if(test && (k < j || k > i))
+                child[k] = firstParent[k];
+
+
+        }
+
+        for(int k = 1; k < numberOfVertex; k++){
+
+            boolean test = true;
+
+            for(int v : child){
+
+                if(k == v){
+
+                    test = false;
+                    break;
+
+                }
+
+            }
+
+            if(test){
+
+                for(int h = 1; h < numberOfVertex; h++) {
+
+                    if (child[h] == 0) {
+
+                        child[h] = k;
+                        break;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        child[0] = 0;
+        child[child.length - 2] = 0;
+        child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return  child;
 
