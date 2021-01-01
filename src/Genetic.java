@@ -462,4 +462,47 @@ public class Genetic {
 
     }
 
+    public int [] cycleCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+
+        int [] child = new int[numberOfVertex + 2];
+
+        int index = 1;
+        int first = firstParent[index];
+        child[1] = firstParent[index];
+
+        while(true){
+
+            int actual = secondParent[index];
+
+            if(actual == first)
+                break;
+
+            for(int i = 1; i < numberOfVertex; i++){
+
+                if(actual == firstParent[i]){
+
+                    child[i] = firstParent[i];
+                    index = i;
+
+                }
+
+            }
+
+        }
+
+        for(int i = 1; i < numberOfVertex; i++){
+
+            if(child[i] == 0)
+                child[i] = secondParent[i];
+
+        }
+
+        child[0] = 0;
+        child[child.length - 2] = 0;
+        child[child.length - 1] = utils.getRouteCost(graph, child);
+
+        return child;
+
+    }
+
 }

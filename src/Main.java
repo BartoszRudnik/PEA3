@@ -10,14 +10,14 @@ public class Main {
         int [][] graph;
         int numberOfVertex;
 
-        reader.readData2("ftv33.atsp");
+        reader.readData2("ftv47.atsp");
 
         graph = reader.getGraph();
         numberOfVertex = reader.getV();
 
         List<int[]> population = genetic.getPopulation();
 
-        genetic.generatePopulation(graph, numberOfVertex, 150);
+        genetic.generatePopulation(graph, numberOfVertex, 10);
 
         for (int[] route : population) {
 
@@ -33,8 +33,8 @@ public class Main {
 
         System.out.println();
 
-        int [] firstParent = genetic.tournamentSelection(numberOfVertex, 150, 10);
-        int [] secondParent = genetic.tournamentSelection(numberOfVertex, 150, 10);
+        int [] firstParent = genetic.tournamentSelection(numberOfVertex, 10, 2);
+        int [] secondParent = genetic.tournamentSelection(numberOfVertex, 10, 2);
 
         for(int i : firstParent)
             System.out.print(i + " ");
@@ -46,7 +46,7 @@ public class Main {
 
         System.out.println();
 
-        int [] child = genetic.partiallyMappedCrossover(graph, firstParent, secondParent, numberOfVertex);
+        int [] child = genetic.cycleCrossover(graph, firstParent, secondParent, numberOfVertex);
 
         boolean [] test = new boolean[child.length];
 
