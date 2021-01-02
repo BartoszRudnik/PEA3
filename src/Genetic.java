@@ -710,6 +710,57 @@ public class Genetic {
 
     }
 
+    public int[] enhancedSequentialConstructiveCrossover(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
+
+        int[] child = new int[numberOfVertex + 2];
+
+        int position = 1;
+
+        int addNode = firstParent[position];
+        int firstNode;
+        int secondNode;
+
+        int firstParentIndex;
+        int secondParentIndex;
+
+        child[position] = addNode;
+        position++;
+
+        while (position < numberOfVertex) {
+
+            firstParentIndex = sequentialIndex(numberOfVertex, firstParent, addNode);
+            secondParentIndex = sequentialIndex(numberOfVertex, secondParent, addNode);
+
+            firstNode = sequentialNode(numberOfVertex, firstParentIndex, position, firstParent, child);
+            secondNode = sequentialNode(numberOfVertex, secondParentIndex, position, secondParent, child);
+
+            int firstParentMin = minRowValue(firstNode, graph, numberOfVertex, child);
+            int secondParentMin = minRowValue(secondNode, graph, numberOfVertex, child);
+
+            if (graph[addNode][firstNode] + firstParentMin < graph[addNode][secondNode] + secondParentMin) {
+
+                child[position] = firstNode;
+                addNode = firstNode;
+
+            } else {
+
+                child[position] = secondNode;
+                addNode = secondNode;
+
+            }
+
+            position++;
+
+        }
+
+        child[0] = 0;
+        child[child.length - 2] = 0;
+        child[child.length - 1] = utils.getRouteCost(graph, child);
+
+        return child;
+
+    }
+
     public int sequentialIndex(int numberOfVertex, int[] parent, int addNode) {
 
         int index = 0;
@@ -736,7 +787,7 @@ public class Genetic {
         for (int i = 0; i < numberOfVertex; i++) {
 
             if (parentIndex + 1 == numberOfVertex)
-                parentIndex = 1;
+                parentIndex = 0;
 
             boolean check = true;
             int tmp = parent[parentIndex + 1];
@@ -762,6 +813,34 @@ public class Genetic {
         }
 
         return node;
+
+    }
+
+    public int minRowValue(int row, int[][] graph, int numberOfVertex, int[] child) {
+
+        int min = Integer.MAX_VALUE;
+
+        for (int i = 0; i < numberOfVertex; i++) {
+
+            boolean check = true;
+
+            for (int j = 0; j < numberOfVertex; j++) {
+
+                if (i == child[j]) {
+
+                    check = false;
+                    break;
+
+                }
+
+            }
+
+            if (graph[row][i] < min && check)
+                min = graph[row][i];
+
+        }
+
+        return min;
 
     }
 

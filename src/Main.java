@@ -17,7 +17,7 @@ public class Main {
 
         List<int[]> population = genetic.getPopulation();
 
-        genetic.generatePopulation(graph, numberOfVertex, 10);
+        genetic.generatePopulation(graph, numberOfVertex, 150);
 
         for (int[] route : population) {
 
@@ -33,8 +33,8 @@ public class Main {
 
         System.out.println();
 
-        int[] firstParent = genetic.tournamentSelection(numberOfVertex, 10, 4);
-        int[] secondParent = genetic.tournamentSelection(numberOfVertex, 10, 4);
+        int[] firstParent = genetic.tournamentSelection(numberOfVertex, 150, 4);
+        int[] secondParent = genetic.tournamentSelection(numberOfVertex, 150, 4);
 
         for (int i : firstParent)
             System.out.print(i + " ");
@@ -46,7 +46,7 @@ public class Main {
 
         System.out.println();
 
-        int[] child = genetic.sequentialConstructiveCrossover(graph, firstParent, secondParent, numberOfVertex);
+        int[] child = genetic.enhancedSequentialConstructiveCrossover(graph, firstParent, secondParent, numberOfVertex);
 
         boolean [] test = new boolean[child.length];
 
