@@ -662,4 +662,107 @@ public class Genetic {
 
     }
 
+    public int[] sequentialConstructiveCrossover(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
+
+        int[] child = new int[numberOfVertex + 2];
+
+        int position = 1;
+
+        int addNode = firstParent[position];
+        int firstNode;
+        int secondNode;
+
+        int firstParentIndex;
+        int secondParentIndex;
+
+        child[position] = addNode;
+        position++;
+
+        while (position < numberOfVertex) {
+
+            firstParentIndex = sequentialIndex(numberOfVertex, firstParent, addNode);
+            secondParentIndex = sequentialIndex(numberOfVertex, secondParent, addNode);
+
+            firstNode = sequentialNode(numberOfVertex, firstParentIndex, position, firstParent, child);
+            secondNode = sequentialNode(numberOfVertex, secondParentIndex, position, secondParent, child);
+
+            if (graph[addNode][firstNode] < graph[addNode][secondNode]) {
+
+                child[position] = firstNode;
+                addNode = firstNode;
+
+            } else {
+
+                child[position] = secondNode;
+                addNode = secondNode;
+
+            }
+
+            position++;
+
+        }
+
+        child[0] = 0;
+        child[child.length - 2] = 0;
+        child[child.length - 1] = utils.getRouteCost(graph, child);
+
+        return child;
+
+    }
+
+    public int sequentialIndex(int numberOfVertex, int[] parent, int addNode) {
+
+        int index = 0;
+
+        for (int i = 1; i < numberOfVertex; i++) {
+
+            if (parent[i] == addNode) {
+
+                index = i;
+                break;
+
+            }
+
+        }
+
+        return index;
+
+    }
+
+    public int sequentialNode(int numberOfVertex, int parentIndex, int position, int[] parent, int[] child) {
+
+        int node = 0;
+
+        for (int i = 0; i < numberOfVertex; i++) {
+
+            if (parentIndex + 1 == numberOfVertex)
+                parentIndex = 1;
+
+            boolean check = true;
+            int tmp = parent[parentIndex + 1];
+
+            for (int j = 1; j < position; j++) {
+
+                if (child[j] == tmp || tmp == 0) {
+                    check = false;
+                    break;
+                }
+
+            }
+
+            if (check) {
+
+                node = tmp;
+                break;
+
+            }
+
+            parentIndex++;
+
+        }
+
+        return node;
+
+    }
+
 }
