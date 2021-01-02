@@ -323,4 +323,21 @@ public class UtilsFunction {
 
     }
 
+    public boolean checkRoute(int [] route){
+
+        boolean [] check = new boolean[numberOfVertex];
+
+        for(int i = 0; i < numberOfVertex; i++){
+
+            if(check[route[i]])
+                return false;
+
+            check[route[i]] = true;
+
+        }
+
+        return true;
+
+    }
+
 }

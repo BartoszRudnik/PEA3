@@ -52,7 +52,10 @@ public class Genetic {
             System.arraycopy(newRoute, 0, route, 0, newRoute.length);
             route[route.length - 1] = routeCost;
 
-            population.add(route);
+            if(utils.checkRoute(route))
+                population.add(route);
+            else
+                i--;
 
         }
 
@@ -67,7 +70,10 @@ public class Genetic {
             System.arraycopy(newRoute, 0, route, 0, newRoute.length);
             route[route.length - 1] = routeCost;
 
-            population.add(route);
+            if(utils.checkRoute(route))
+                population.add(route);
+            else
+                i--;
 
         }
 
@@ -502,6 +508,157 @@ public class Genetic {
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return child;
+
+    }
+
+    public int [][] cycleCrossover2(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+
+        int [] child = new int[numberOfVertex + 2];
+        int [] child2 = new int[numberOfVertex + 2];
+
+        int [][] returnChildren = new int[2][numberOfVertex + 2];
+
+        int position = 1;
+        int firstBit = firstParent[1];
+        child[position] = secondParent[1];
+        int actualValue = secondParent[1];
+
+        boolean test = true;
+        boolean condition = true;
+
+        while(condition) {
+
+            do {
+
+                for (int j = 0; j < 3; j++) {
+
+                    int index = 0;
+
+                    for (int i = 1; i < firstParent.length; i++) {
+
+                        if (firstParent[i] == actualValue) {
+
+                            index = i;
+                            break;
+
+                        }
+
+                    }
+
+                    actualValue = secondParent[index];
+
+                    if (j == 1) {
+
+                        child2[position] = actualValue;
+
+                        if (actualValue == firstBit)
+                            test = false;
+
+                        position++;
+
+                    }
+
+                }
+
+                if(position >= numberOfVertex - 1) {
+                    condition = false;
+                    break;
+                }
+
+                if (test)
+                    child[position] = actualValue;
+                else
+                    break;
+
+            } while (true);
+
+            for (int i = 1; i < numberOfVertex; i++) {
+
+                boolean check = true;
+
+                int tmp = secondParent[i];
+
+                for (int j = 1; j < position; j++) {
+
+                    if (tmp == child[j]) {
+                        check = false;
+                        break;
+                    }
+
+                }
+
+                if (check) {
+
+                    actualValue = tmp;
+                    break;
+
+                }
+
+            }
+
+            for (int i = 1; i < numberOfVertex; i++) {
+
+                boolean check = true;
+
+                int tmp = firstParent[i];
+
+                for (int j = 1; j < position; j++) {
+
+                    if (tmp == child2[j]) {
+                        check = false;
+                        break;
+                    }
+
+                }
+
+                if (check) {
+
+                    firstBit = tmp;
+                    break;
+
+                }
+
+                child[position] = actualValue;
+                test = true;
+
+            }
+
+        }
+
+        for (int j = 0; j < 2; j++) {
+
+            int index = 0;
+
+            for (int i = 1; i < firstParent.length; i++) {
+
+                if (firstParent[i] == actualValue) {
+
+                    index = i;
+                    break;
+
+                }
+
+            }
+
+            actualValue = secondParent[index];
+
+            if (j == 1)
+                child2[position] = actualValue;
+
+        }
+
+        child[0] = 0;
+        child[child.length - 2] = 0;
+        child[child.length - 1] = utils.getRouteCost(graph, child);
+
+        child2[0] = 0;
+        child2[child2.length - 2] = 0;
+        child2[child2.length - 1] = utils.getRouteCost(graph, child2);
+
+        returnChildren[0] = child;
+        returnChildren[1] = child2;
+
+        return returnChildren;
 
     }
 
