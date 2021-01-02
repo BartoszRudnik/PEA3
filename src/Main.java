@@ -36,9 +36,6 @@ public class Main {
         int [] firstParent = genetic.tournamentSelection(numberOfVertex, 150, 10);
         int [] secondParent = genetic.tournamentSelection(numberOfVertex, 150, 10);
 
-        //firstParent = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 0};
-        //secondParent = new int[]{0, 2, 7, 5, 8, 4, 1, 6, 3, 0};
-
         for(int i : firstParent)
             System.out.print(i + " ");
 
@@ -61,7 +58,7 @@ public class Main {
 
             System.out.print(i + " ");
 
-            if(i < test.length) {
+            if (i < test.length) {
 
                 if (test[i])
                     System.out.print("x ");
@@ -75,11 +72,11 @@ public class Main {
         System.out.println();
         test = new boolean[child2.length];
 
-        for(int i : child2) {
+        for (int i : child2) {
 
             System.out.print(i + " ");
 
-            if(i < test.length) {
+            if (i < test.length) {
 
                 if (test[i])
                     System.out.print("x ");
