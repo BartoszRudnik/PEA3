@@ -9,7 +9,7 @@ public class Genetic {
 
     private List<int[]> population;
 
-    public Genetic(){
+    public Genetic() {
 
         population = new ArrayList<>();
 
@@ -23,15 +23,15 @@ public class Genetic {
         this.population = population;
     }
 
-    public void generatePopulation(int [][] graph, int numberOfVertex, int populationSize){
+    public void generatePopulation(int[][] graph, int numberOfVertex, int populationSize) {
 
         utils.setNumberOfVertex(numberOfVertex);
         Random random = new Random();
 
         int routeCost;
 
-        int [] route = new int[numberOfVertex + 2];
-        int [] newRoute = utils.greedy(graph);
+        int[] route = new int[numberOfVertex + 2];
+        int[] newRoute = utils.greedy(graph);
         routeCost = utils.getRouteCost(graph, newRoute);
 
         System.arraycopy(newRoute, 0, route, 0, newRoute.length);
@@ -41,7 +41,7 @@ public class Genetic {
 
         int rGreedySize = (populationSize / 5) * 4;
 
-        for(int i = 0; i < rGreedySize; i++){
+        for (int i = 0; i < rGreedySize; i++) {
 
             int n = random.nextInt(numberOfVertex - 2) + 1;
 
@@ -52,7 +52,7 @@ public class Genetic {
             System.arraycopy(newRoute, 0, route, 0, newRoute.length);
             route[route.length - 1] = routeCost;
 
-            if(utils.checkRoute(route))
+            if (utils.checkRoute(route))
                 population.add(route);
             else
                 i--;
@@ -61,7 +61,7 @@ public class Genetic {
 
         int randomSize = populationSize - rGreedySize - 1;
 
-        for(int i = 0; i < randomSize; i++){
+        for (int i = 0; i < randomSize; i++) {
 
             route = new int[numberOfVertex + 2];
             newRoute = utils.shuffleArray(newRoute);
@@ -70,7 +70,7 @@ public class Genetic {
             System.arraycopy(newRoute, 0, route, 0, newRoute.length);
             route[route.length - 1] = routeCost;
 
-            if(utils.checkRoute(route))
+            if (utils.checkRoute(route))
                 population.add(route);
             else
                 i--;
@@ -79,11 +79,11 @@ public class Genetic {
 
     }
 
-    public void sortPopulation(List<int []> toSort){
+    public void sortPopulation(List<int[]> toSort) {
         toSort.sort(Comparator.comparingInt(o -> o[o.length - 1]));
     }
 
-    public void clearPopulation(int populationSize, int exclusivity){
+    public void clearPopulation(int populationSize, int exclusivity) {
 
         sortPopulation(population);
 
@@ -93,28 +93,27 @@ public class Genetic {
 
     }
 
-    public int [] tournamentSelection(int numberOfVertex, int populationSize, int n){
+    public int[] tournamentSelection(int numberOfVertex, int populationSize, int n) {
 
         Random random = new Random();
 
-        boolean [] test = new boolean[populationSize];
-        int [] bestRoute = new int[numberOfVertex + 2];
+        boolean[] test = new boolean[populationSize];
+        int[] bestRoute = new int[numberOfVertex + 2];
         int bestCost = Integer.MAX_VALUE;
 
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
 
             int randomIndex = random.nextInt(populationSize);
 
-            if(test[randomIndex]) {
+            if (test[randomIndex]) {
                 i--;
                 continue;
-            }
-            else
+            } else
                 test[randomIndex] = true;
 
-            int [] currentRoute = population.get(randomIndex);
+            int[] currentRoute = population.get(randomIndex);
 
-            if(currentRoute[currentRoute.length - 1] < bestCost){
+            if (currentRoute[currentRoute.length - 1] < bestCost) {
 
                 bestCost = currentRoute[currentRoute.length - 1];
                 bestRoute = currentRoute.clone();
@@ -127,30 +126,30 @@ public class Genetic {
 
     }
 
-    public int [] rankingSelection(int populationSize){
+    public int[] rankingSelection(int populationSize) {
 
         Random random = new Random();
 
-        List<int []> tmpPopulation = new ArrayList<>(population);
-        double [] fitnessValue = new double[populationSize];
-        double totalFitnessValue  = 0.0;
+        List<int[]> tmpPopulation = new ArrayList<>(population);
+        double[] fitnessValue = new double[populationSize];
+        double totalFitnessValue = 0.0;
         double fitnessSum = 0.0;
         int returnIndex = 0;
 
         sortPopulation(tmpPopulation);
 
-        for(int i = 0; i < populationSize; i++){
+        for (int i = 0; i < populationSize; i++) {
 
             fitnessValue[i] = (populationSize - i) / (double) populationSize * (populationSize - 1);
 
         }
 
-        for(int i = 0; i < populationSize; i++)
+        for (int i = 0; i < populationSize; i++)
             totalFitnessValue += fitnessValue[i];
 
         int helpRank = populationSize;
 
-        for(int i = 0; i < populationSize; i++){
+        for (int i = 0; i < populationSize; i++) {
 
             fitnessValue[i] = helpRank / totalFitnessValue;
             helpRank--;
@@ -159,11 +158,11 @@ public class Genetic {
 
         double testValue = random.nextDouble();
 
-        for(int i = 0; i < populationSize; i++){
+        for (int i = 0; i < populationSize; i++) {
 
             fitnessSum += fitnessValue[i];
 
-            if(fitnessSum >= testValue){
+            if (fitnessSum >= testValue) {
 
                 returnIndex = i;
                 break;
@@ -172,44 +171,44 @@ public class Genetic {
 
         }
 
-        return  tmpPopulation.get(returnIndex);
+        return tmpPopulation.get(returnIndex);
 
     }
 
-    public int [] rouletteSelection(int populationSize){
+    public int[] rouletteSelection(int populationSize) {
 
         Random random = new Random();
 
-        List<int []> tmpPopulation = new ArrayList<>(population);
-        double [] fitnessValue = new double[populationSize];
-        double totalFitnessValue  = 0.0;
+        List<int[]> tmpPopulation = new ArrayList<>(population);
+        double[] fitnessValue = new double[populationSize];
+        double totalFitnessValue = 0.0;
         double fitnessSum = 0.0;
         int returnIndex = 0;
 
         sortPopulation(tmpPopulation);
 
-        for(int i = 0; i < populationSize; i++){
+        for (int i = 0; i < populationSize; i++) {
 
-            int [] route = tmpPopulation.get(i);
+            int[] route = tmpPopulation.get(i);
             int pathCost = route[route.length - 1];
 
             fitnessValue[i] = 1 / (double) pathCost;
 
         }
 
-        for(int i = 0; i < populationSize; i++)
+        for (int i = 0; i < populationSize; i++)
             totalFitnessValue += fitnessValue[i];
 
-        for(int i = 0; i < populationSize; i++)
+        for (int i = 0; i < populationSize; i++)
             fitnessValue[i] /= totalFitnessValue;
 
         double testValue = random.nextDouble();
 
-        for(int i = 0; i < populationSize; i++){
+        for (int i = 0; i < populationSize; i++) {
 
             fitnessSum += fitnessValue[i];
 
-            if(fitnessSum >= testValue){
+            if (fitnessSum >= testValue) {
 
                 returnIndex = i;
                 break;
@@ -218,26 +217,26 @@ public class Genetic {
 
         }
 
-        return  tmpPopulation.get(returnIndex);
+        return tmpPopulation.get(returnIndex);
 
     }
 
-    public int [] twoPointCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+    public int[] twoPointCrossover(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
 
-        int [] child = new int[firstParent.length];
+        int[] child = new int[firstParent.length];
 
         Random random = new Random();
         int i = 0;
         int j = 0;
 
-        while(i == j) {
+        while (i == j) {
 
             i = random.nextInt(numberOfVertex - 2) + 1;
             j = random.nextInt(numberOfVertex - 2) + 1;
 
         }
 
-        if(j > i){
+        if (j > i) {
 
             int tmp = i;
             i = j;
@@ -245,10 +244,10 @@ public class Genetic {
 
         }
 
-        int [] chosenVertexes = new int[i - j + 1];
+        int[] chosenVertexes = new int[i - j + 1];
         int tmpIndex = 0;
 
-        for(int start = j; start <= i; start++) {
+        for (int start = j; start <= i; start++) {
 
             chosenVertexes[tmpIndex] = firstParent[start];
             tmpIndex++;
@@ -257,7 +256,7 @@ public class Genetic {
 
         tmpIndex = 0;
 
-        for(int start = 0; start < firstParent.length - 2; start++){
+        for (int start = 0; start < firstParent.length - 2; start++) {
 
             boolean add = true;
             int tmp = secondParent[start];
@@ -268,7 +267,7 @@ public class Genetic {
                     break;
                 }
 
-            if(add) {
+            if (add) {
                 child[tmpIndex] = tmp;
                 tmpIndex++;
             }
@@ -277,7 +276,7 @@ public class Genetic {
 
         int tmpIndex2 = chosenVertexes.length - 1;
 
-        for(int start = tmpIndex; start < firstParent.length - 2; start++){
+        for (int start = tmpIndex; start < firstParent.length - 2; start++) {
 
             child[start] = chosenVertexes[tmpIndex2];
             tmpIndex2--;
@@ -291,22 +290,22 @@ public class Genetic {
 
     }
 
-    public int [] orderCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+    public int[] orderCrossover(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
 
-        int [] child = new int[numberOfVertex + 2];
+        int[] child = new int[numberOfVertex + 2];
 
         Random random = new Random();
         int i = 0;
         int j = 0;
 
-        while(i == j) {
+        while (i == j) {
 
             i = random.nextInt(numberOfVertex - 2) + 1;
             j = random.nextInt(numberOfVertex - 2) + 1;
 
         }
 
-        if(j > i){
+        if (j > i) {
 
             int tmp = i;
             i = j;
@@ -314,10 +313,10 @@ public class Genetic {
 
         }
 
-        int [] chosenVertexes = new int[i - j + 1];
+        int[] chosenVertexes = new int[i - j + 1];
         int tmpIndex = 0;
 
-        for(int start = j; start <= i; start++) {
+        for (int start = j; start <= i; start++) {
 
             chosenVertexes[tmpIndex] = firstParent[start];
             tmpIndex++;
@@ -327,7 +326,7 @@ public class Genetic {
         tmpIndex = i + 1;
         int tmpIndex2 = i + 1;
 
-        for(int k = 0; k < secondParent.length; k++){
+        for (int k = 0; k < secondParent.length; k++) {
 
             int tmpVertex = secondParent[tmpIndex2];
             boolean test = true;
@@ -341,24 +340,24 @@ public class Genetic {
 
             }
 
-            if(test) {
+            if (test) {
                 child[tmpIndex] = tmpVertex;
                 tmpIndex++;
             }
 
             tmpIndex2++;
 
-            if(tmpIndex == secondParent.length - 2)
+            if (tmpIndex == secondParent.length - 2)
                 tmpIndex = 1;
 
-            if(tmpIndex2 == secondParent.length - 2)
+            if (tmpIndex2 == secondParent.length - 2)
                 tmpIndex2 = 1;
 
         }
 
         tmpIndex2 = 0;
 
-        for(int k = j; k <= i; k++) {
+        for (int k = j; k <= i; k++) {
 
             child[k] = chosenVertexes[tmpIndex2];
             tmpIndex2++;
@@ -373,22 +372,22 @@ public class Genetic {
 
     }
 
-    public int [] partiallyMappedCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+    public int[] partiallyMappedCrossover(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
 
-        int [] child = new int[numberOfVertex + 2];
+        int[] child = new int[numberOfVertex + 2];
 
         Random random = new Random();
         int i = 0;
         int j = 0;
 
-        while(i == j) {
+        while (i == j) {
 
             i = random.nextInt(numberOfVertex - 2) + 1;
             j = random.nextInt(numberOfVertex - 2) + 1;
 
         }
 
-        if(j > i){
+        if (j > i) {
 
             int tmp = i;
             i = j;
@@ -396,10 +395,10 @@ public class Genetic {
 
         }
 
-        int [] chosenVertexes = new int[i - j + 1];
+        int[] chosenVertexes = new int[i - j + 1];
         int tmpIndex = 0;
 
-        for(int k = j;  k <= i; k++){
+        for (int k = j; k <= i; k++) {
 
             chosenVertexes[tmpIndex] = secondParent[k];
             child[k] = secondParent[k];
@@ -407,13 +406,13 @@ public class Genetic {
 
         }
 
-        for(int k = 1; k < numberOfVertex; k++){
+        for (int k = 1; k < numberOfVertex; k++) {
 
             boolean test = true;
 
-            for(int chosenVertex : chosenVertexes){
+            for (int chosenVertex : chosenVertexes) {
 
-                if(firstParent[k] == chosenVertex) {
+                if (firstParent[k] == chosenVertex) {
 
                     test = false;
                     break;
@@ -422,19 +421,19 @@ public class Genetic {
 
             }
 
-            if(test && (k < j || k > i))
+            if (test && (k < j || k > i))
                 child[k] = firstParent[k];
 
 
         }
 
-        for(int k = 1; k < numberOfVertex; k++){
+        for (int k = 1; k < numberOfVertex; k++) {
 
             boolean test = true;
 
-            for(int v : child){
+            for (int v : child) {
 
-                if(k == v){
+                if (k == v) {
 
                     test = false;
                     break;
@@ -443,9 +442,9 @@ public class Genetic {
 
             }
 
-            if(test){
+            if (test) {
 
-                for(int h = 1; h < numberOfVertex; h++) {
+                for (int h = 1; h < numberOfVertex; h++) {
 
                     if (child[h] == 0) {
 
@@ -464,28 +463,28 @@ public class Genetic {
         child[child.length - 2] = 0;
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
-        return  child;
+        return child;
 
     }
 
-    public int [] cycleCrossover(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+    public int[] cycleCrossover(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
 
-        int [] child = new int[numberOfVertex + 2];
+        int[] child = new int[numberOfVertex + 2];
 
         int index = 1;
         int first = firstParent[index];
         child[1] = firstParent[index];
 
-        while(true){
+        while (true) {
 
             int actual = secondParent[index];
 
-            if(actual == first)
+            if (actual == first)
                 break;
 
-            for(int i = 1; i < numberOfVertex; i++){
+            for (int i = 1; i < numberOfVertex; i++) {
 
-                if(actual == firstParent[i]){
+                if (actual == firstParent[i]) {
 
                     child[i] = firstParent[i];
                     index = i;
@@ -496,9 +495,9 @@ public class Genetic {
 
         }
 
-        for(int i = 1; i < numberOfVertex; i++){
+        for (int i = 1; i < numberOfVertex; i++) {
 
-            if(child[i] == 0)
+            if (child[i] == 0)
                 child[i] = secondParent[i];
 
         }
@@ -511,12 +510,12 @@ public class Genetic {
 
     }
 
-    public int [][] cycleCrossover2(int [][] graph, int [] firstParent, int [] secondParent, int numberOfVertex){
+    public int[][] cycleCrossover2(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
 
-        int [] child = new int[numberOfVertex + 2];
-        int [] child2 = new int[numberOfVertex + 2];
+        int[] child = new int[numberOfVertex + 2];
+        int[] child2 = new int[numberOfVertex + 2];
 
-        int [][] returnChildren = new int[2][numberOfVertex + 2];
+        int[][] returnChildren = new int[2][numberOfVertex + 2];
 
         int position = 1;
         int firstBit = firstParent[1];
@@ -526,7 +525,7 @@ public class Genetic {
         boolean test = true;
         boolean condition = true;
 
-        while(condition) {
+        while (condition) {
 
             do {
 
@@ -560,7 +559,7 @@ public class Genetic {
 
                 }
 
-                if(position >= numberOfVertex - 1) {
+                if (position >= numberOfVertex - 1) {
                     condition = false;
                     break;
                 }
@@ -841,6 +840,136 @@ public class Genetic {
         }
 
         return min;
+
+    }
+
+    public void algorithm(int[][] graph, int numberOfVertex, int seconds, int populationSize, int exclusivity, int selection, int crossover, double mutationChance, int mutationType) {
+
+        Random random = new Random();
+
+        long finishTime = System.currentTimeMillis() + seconds * 1000L;
+
+        int[] bestRoute = new int[numberOfVertex + 2];
+        bestRoute[bestRoute.length - 1] = Integer.MAX_VALUE;
+
+        generatePopulation(graph, numberOfVertex, populationSize);
+
+        while (System.currentTimeMillis() < finishTime) {
+
+            for (int[] route : population) {
+
+                if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
+
+                    bestRoute = route.clone();
+
+                }
+
+            }
+
+            int[] firstParent;
+            int[] secondParent;
+
+            List<int[]> newPopulation = new ArrayList<>();
+
+            for (int i = 0; i < (populationSize - exclusivity) / 2; i++) {
+
+                int[] child1;
+                int[] child2;
+
+                if (selection == 0) {
+
+                    firstParent = tournamentSelection(numberOfVertex, populationSize, 2);
+                    secondParent = tournamentSelection(numberOfVertex, populationSize, 2);
+
+                } else if (selection == 1) {
+
+                    firstParent = rouletteSelection(populationSize);
+                    secondParent = rouletteSelection(populationSize);
+
+                } else {
+
+                    firstParent = rankingSelection(populationSize);
+                    secondParent = rankingSelection(populationSize);
+
+                }
+
+                if (crossover == 0) {
+
+                    child1 = twoPointCrossover(graph, firstParent, secondParent, numberOfVertex);
+                    child2 = twoPointCrossover(graph, secondParent, firstParent, numberOfVertex);
+
+                } else if (crossover == 1) {
+
+                    child1 = orderCrossover(graph, firstParent, secondParent, numberOfVertex);
+                    child2 = orderCrossover(graph, secondParent, firstParent, numberOfVertex);
+
+                } else if (crossover == 2) {
+
+                    child1 = partiallyMappedCrossover(graph, firstParent, secondParent, numberOfVertex);
+                    child2 = partiallyMappedCrossover(graph, secondParent, firstParent, numberOfVertex);
+
+                } else if (crossover == 3) {
+
+                    child1 = cycleCrossover(graph, firstParent, secondParent, numberOfVertex);
+                    child2 = cycleCrossover(graph, secondParent, firstParent, numberOfVertex);
+
+                } else if (crossover == 4) {
+
+                    int[][] children = cycleCrossover2(graph, firstParent, secondParent, numberOfVertex);
+
+                    child1 = children[0];
+                    child2 = children[1];
+
+                } else if (crossover == 5) {
+
+                    child1 = sequentialConstructiveCrossover(graph, firstParent, secondParent, numberOfVertex);
+                    child2 = sequentialConstructiveCrossover(graph, secondParent, firstParent, numberOfVertex);
+
+                } else {
+
+                    child1 = enhancedSequentialConstructiveCrossover(graph, firstParent, secondParent, numberOfVertex);
+                    child2 = enhancedSequentialConstructiveCrossover(graph, secondParent, firstParent, numberOfVertex);
+
+                }
+
+                newPopulation.add(child1);
+                newPopulation.add(child2);
+
+            }
+
+            for (int[] route : newPopulation) {
+
+                double chance = random.nextDouble();
+
+                if (mutationChance >= chance) {
+
+                    int start = 0;
+                    int end = 0;
+
+                    while (start == end) {
+                        start = random.nextInt(numberOfVertex - 2) + 1;
+                        end = random.nextInt(numberOfVertex - 2) + 1;
+                    }
+
+                    if (mutationType == 0)
+                        route = utils.insertRoute(route, start, end);
+                    if (mutationType == 1)
+                        route = utils.swapRoute(route, start, end);
+                    if (mutationType == 2)
+                        route = utils.reverseRoute(route, start, end);
+
+                }
+
+            }
+
+            clearPopulation(populationSize, exclusivity);
+
+            population.addAll(newPopulation);
+
+        }
+
+        for (int i : bestRoute)
+            System.out.print(i + " ");
 
     }
 
