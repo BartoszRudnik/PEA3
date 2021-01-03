@@ -88,7 +88,7 @@ public class Genetic {
         sortPopulation(population);
 
         if (populationSize > exclusivity) {
-            population.subList(exclusivity, populationSize).clear();
+            population.subList(exclusivity, populationSize - 1).clear();
         }
 
     }
@@ -103,7 +103,7 @@ public class Genetic {
 
         for (int i = 0; i < n; i++) {
 
-            int randomIndex = random.nextInt(populationSize);
+            int randomIndex = random.nextInt(populationSize - 1);
 
             if (test[randomIndex]) {
                 i--;
@@ -326,7 +326,13 @@ public class Genetic {
         tmpIndex = i + 1;
         int tmpIndex2 = i + 1;
 
-        for (int k = 0; k < secondParent.length; k++) {
+        if (tmpIndex == secondParent.length - 2)
+            tmpIndex = 1;
+
+        if (tmpIndex2 == secondParent.length - 2)
+            tmpIndex2 = 1;
+
+        for (int k = 0; k < numberOfVertex; k++) {
 
             int tmpVertex = secondParent[tmpIndex2];
             boolean test = true;
@@ -854,17 +860,17 @@ public class Genetic {
 
         generatePopulation(graph, numberOfVertex, populationSize);
 
-        while (System.currentTimeMillis() < finishTime) {
+        for (int[] route : population) {
 
-            for (int[] route : population) {
+            if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
 
-                if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
-
-                    bestRoute = route.clone();
-
-                }
+                bestRoute = route.clone();
 
             }
+
+        }
+
+        while (System.currentTimeMillis() < finishTime) {
 
             int[] firstParent;
             int[] secondParent;
@@ -878,18 +884,18 @@ public class Genetic {
 
                 if (selection == 0) {
 
-                    firstParent = tournamentSelection(numberOfVertex, populationSize, 2);
-                    secondParent = tournamentSelection(numberOfVertex, populationSize, 2);
+                    firstParent = tournamentSelection(numberOfVertex, population.size(), 2);
+                    secondParent = tournamentSelection(numberOfVertex, population.size(), 2);
 
                 } else if (selection == 1) {
 
-                    firstParent = rouletteSelection(populationSize);
-                    secondParent = rouletteSelection(populationSize);
+                    firstParent = rouletteSelection(population.size());
+                    secondParent = rouletteSelection(population.size());
 
                 } else {
 
-                    firstParent = rankingSelection(populationSize);
-                    secondParent = rankingSelection(populationSize);
+                    firstParent = rankingSelection(population.size());
+                    secondParent = rankingSelection(population.size());
 
                 }
 
@@ -958,6 +964,8 @@ public class Genetic {
                     if (mutationType == 2)
                         route = utils.reverseRoute(route, start, end);
 
+                    route[route.length - 1] = utils.getRouteCost(graph, route);
+
                 }
 
             }
@@ -965,6 +973,16 @@ public class Genetic {
             clearPopulation(populationSize, exclusivity);
 
             population.addAll(newPopulation);
+
+            for (int[] route : population) {
+
+                if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
+
+                    bestRoute = route.clone();
+
+                }
+
+            }
 
         }
 

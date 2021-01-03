@@ -13,7 +13,7 @@ public class Main {
         graph = reader.getGraph();
         numberOfVertex = reader.getV();
 
-        genetic.algorithm(graph, numberOfVertex, 10, 150, 10, 0, 5, 0.15, 0);
+        genetic.algorithm(graph, numberOfVertex, 3, 150, 10, 0, 1, 0.15, 0);
 
     }
 
