@@ -87,7 +87,7 @@ public class Genetic {
         sortPopulation(population);
 
         if (populationSize > exclusivity) {
-            population.subList(exclusivity, populationSize - 1).clear();
+            population.subList(exclusivity, population.size()).clear();
         }
 
     }
@@ -111,12 +111,6 @@ public class Genetic {
             if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
 
                 bestRoute = route.clone();
-
-                System.out.print("XXX ");
-
-                for (int i : bestRoute)
-                    System.out.print(i + " ");
-                System.out.println();
 
             }
 
@@ -231,10 +225,6 @@ public class Genetic {
                 if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
 
                     bestRoute = route.clone();
-
-                    for (int i : bestRoute)
-                        System.out.print(i + " ");
-                    System.out.println();
 
                 }
 
