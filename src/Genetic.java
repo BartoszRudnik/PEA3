@@ -28,11 +28,9 @@ public class Genetic {
         utils.setNumberOfVertex(numberOfVertex);
         Random random = new Random();
 
-        int routeCost;
-
         int[] route = new int[numberOfVertex + 2];
         int[] newRoute = utils.greedy(graph);
-        routeCost = utils.getRouteCost(graph, newRoute);
+        int routeCost = utils.getRouteCost(graph, newRoute);
 
         System.arraycopy(newRoute, 0, route, 0, newRoute.length);
         route[route.length - 1] = routeCost;
@@ -54,8 +52,9 @@ public class Genetic {
 
             if (utils.checkRoute(route))
                 population.add(route);
-            else
+            else {
                 i--;
+            }
 
         }
 
@@ -113,6 +112,12 @@ public class Genetic {
 
                 bestRoute = route.clone();
 
+                System.out.print("XXX ");
+
+                for (int i : bestRoute)
+                    System.out.print(i + " ");
+                System.out.println();
+
             }
 
         }
@@ -131,8 +136,8 @@ public class Genetic {
 
                 if (selectionType == 0) {
 
-                    firstParent = selection.tournament(numberOfVertex, population.size(), 2);
-                    secondParent = selection.tournament(numberOfVertex, population.size(), 2);
+                    firstParent = selection.tournament(numberOfVertex, population.size(), 10);
+                    secondParent = selection.tournament(numberOfVertex, population.size(), 10);
 
                 } else if (selectionType == 1) {
 
@@ -226,6 +231,10 @@ public class Genetic {
                 if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
 
                     bestRoute = route.clone();
+
+                    for (int i : bestRoute)
+                        System.out.print(i + " ");
+                    System.out.println();
 
                 }
 
