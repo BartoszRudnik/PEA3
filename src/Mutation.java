@@ -45,9 +45,7 @@ public class Mutation {
     public int[] bestRoute(int[][] graph, int[] route, int numberOfVertex, int mutationType) {
 
         int[] parameters = new int[2];
-        parameters[0] = -1;
-        parameters[1] = -1;
-        int bestCost = route[route.length - 1];
+        int bestCost = Integer.MAX_VALUE;
 
         for (int i = 1; i < numberOfVertex - 1; i++) {
 

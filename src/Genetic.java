@@ -227,18 +227,14 @@ public class Genetic {
 
                 int[] parameters = mutation.bestRoute(graph, route, numberOfVertex, memeticType);
 
-                if (parameters[0] != -1 && parameters[1] != -1) {
+                if (memeticType == 0)
+                    route = mutation.insertRoute(route, parameters[0], parameters[1]);
+                else if (memeticType == 1)
+                    route = mutation.swapRoute(route, parameters[0], parameters[1]);
+                else
+                    route = mutation.reverseRoute(route, parameters[0], parameters[1]);
 
-                    if (memeticType == 0)
-                        route = mutation.insertRoute(route, parameters[0], parameters[1]);
-                    else if (memeticType == 1)
-                        route = mutation.swapRoute(route, parameters[0], parameters[1]);
-                    else
-                        route = mutation.reverseRoute(route, parameters[0], parameters[1]);
-
-                    route[route.length - 1] = utils.getRouteCost(graph, route);
-
-                }
+                route[route.length - 1] = utils.getRouteCost(graph, route);
 
             }
 
