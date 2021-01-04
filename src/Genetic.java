@@ -130,8 +130,8 @@ public class Genetic {
 
                 if (selectionType == 0) {
 
-                    firstParent = selection.tournament(numberOfVertex, population.size(), 10);
-                    secondParent = selection.tournament(numberOfVertex, population.size(), 10);
+                    firstParent = selection.tournament(numberOfVertex, population.size(), 4);
+                    secondParent = selection.tournament(numberOfVertex, population.size(), 4);
 
                 } else if (selectionType == 1) {
 

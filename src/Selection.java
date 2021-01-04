@@ -27,32 +27,46 @@ public class Selection {
 
         Random random = new Random();
 
-        boolean[] test = new boolean[populationSize];
-        int[] bestRoute = new int[numberOfVertex + 2];
-        int bestCost = Integer.MAX_VALUE;
+        int[] finalBest = new int[numberOfVertex + 2];
+        int finalBestCost = Integer.MAX_VALUE;
 
-        for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
 
-            int randomIndex = random.nextInt(populationSize - 1);
+            int[] actualBest = new int[numberOfVertex + 2];
+            int actualBestCost = Integer.MAX_VALUE;
+            boolean[] test = new boolean[populationSize];
 
-            if (test[randomIndex]) {
-                i--;
-                continue;
-            } else
-                test[randomIndex] = true;
+            for (int i = 0; i < 15; i++) {
 
-            int[] currentRoute = population.get(randomIndex);
+                int randomIndex = random.nextInt(populationSize - 1);
 
-            if (currentRoute[currentRoute.length - 1] < bestCost) {
+                if (test[randomIndex]) {
+                    i--;
+                    continue;
+                } else
+                    test[randomIndex] = true;
 
-                bestCost = currentRoute[currentRoute.length - 1];
-                bestRoute = currentRoute.clone();
+                int[] currentRoute = population.get(randomIndex);
+
+                if (currentRoute[currentRoute.length - 1] < actualBestCost) {
+
+                    actualBestCost = currentRoute[currentRoute.length - 1];
+                    actualBest = currentRoute.clone();
+
+                }
+
+            }
+
+            if (actualBest[actualBest.length - 1] < finalBestCost) {
+
+                finalBestCost = actualBest[actualBest.length - 1];
+                finalBest = actualBest.clone();
 
             }
 
         }
 
-        return bestRoute;
+        return finalBest;
 
     }
 
