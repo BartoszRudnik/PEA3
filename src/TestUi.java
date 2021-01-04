@@ -143,13 +143,14 @@ public class TestUi {
                     System.out.println("4. Cycle 2");
                     System.out.println("5. Sequential Constructive");
                     System.out.println("6. Enhanced Sequential Constructive");
+                    System.out.println("7. Single point");
                     System.out.println("_______________");
                     try {
 
                         scanner.nextLine();
                         crossoverType = scanner.nextInt();
 
-                        if (crossoverType < 0 || selectionType > 6) {
+                        if (crossoverType < 0 || selectionType > 7) {
                             crossoverType = 0;
                             throw new Exception();
                         }

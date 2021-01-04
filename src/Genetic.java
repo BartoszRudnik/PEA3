@@ -177,10 +177,15 @@ public class Genetic {
                     child1 = crossover.sequentialConstructive(graph, firstParent, secondParent, numberOfVertex);
                     child2 = crossover.sequentialConstructive(graph, secondParent, firstParent, numberOfVertex);
 
-                } else {
+                } else if (crossoverType == 6) {
 
                     child1 = crossover.enhancedSequentialConstructive(graph, firstParent, secondParent, numberOfVertex);
                     child2 = crossover.enhancedSequentialConstructive(graph, secondParent, firstParent, numberOfVertex);
+
+                } else {
+
+                    child1 = crossover.singlePoint(graph, firstParent, secondParent, numberOfVertex);
+                    child2 = crossover.singlePoint(graph, secondParent, firstParent, numberOfVertex);
 
                 }
 

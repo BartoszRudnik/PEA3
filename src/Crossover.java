@@ -18,6 +18,53 @@ public class Crossover {
 
     }
 
+    public int[] singlePoint(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
+
+        int[] child = new int[numberOfVertex + 2];
+
+        Random random = new Random();
+
+        int border = random.nextInt(numberOfVertex - 2) + 1;
+
+        System.arraycopy(firstParent, 1, child, 1, border);
+
+        int index = border + 1;
+
+        for (int i = 0; i < numberOfVertex; i++) {
+
+            boolean add = true;
+
+            if (index == numberOfVertex - 1)
+                index = 1;
+
+            int tmp = secondParent[i];
+
+            for (int j = 1; j < numberOfVertex; j++) {
+
+                if (tmp == child[j]) {
+
+                    add = false;
+                    break;
+
+                }
+
+            }
+
+            if (add) {
+                child[index] = tmp;
+                index++;
+            }
+
+        }
+
+        child[0] = 0;
+        child[child.length - 2] = 0;
+        child[child.length - 1] = utils.getRouteCost(graph, child);
+
+        return child;
+
+    }
+
     public int[] twoPoint(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
 
         int[] child = new int[firstParent.length];
