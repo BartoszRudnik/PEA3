@@ -92,11 +92,11 @@ public class Genetic {
 
     }
 
-    public void algorithm(int[][] graph, int numberOfVertex, int seconds, int populationSize, int exclusivity, int selectionType, int crossoverType, double mutationChance, int mutationType) {
+    public void algorithm(int[][] graph, int numberOfVertex, int seconds, int populationSize, int exclusivity, int selectionType, int crossoverType, double mutationChance, int mutationType, int memeticType) {
 
         Random random = new Random();
         Crossover crossover = new Crossover(numberOfVertex);
-        Mutation mutation = new Mutation();
+        Mutation mutation = new Mutation(numberOfVertex);
         Selection selection = new Selection(population);
 
         long finishTime = System.currentTimeMillis() + seconds * 1000L;
@@ -130,8 +130,8 @@ public class Genetic {
 
                 if (selectionType == 0) {
 
-                    firstParent = selection.tournament(numberOfVertex, population.size(), 4);
-                    secondParent = selection.tournament(numberOfVertex, population.size(), 4);
+                    firstParent = selection.tournament(numberOfVertex, population.size(), 2);
+                    secondParent = selection.tournament(numberOfVertex, population.size(), 2);
 
                 } else if (selectionType == 1) {
 
@@ -210,8 +210,10 @@ public class Genetic {
 
                     if (mutationType == 0)
                         route = mutation.insertRoute(route, start, end);
+
                     if (mutationType == 1)
                         route = mutation.swapRoute(route, start, end);
+
                     if (mutationType == 2)
                         route = mutation.reverseRoute(route, start, end);
 
@@ -221,17 +223,33 @@ public class Genetic {
 
             }
 
-            clearPopulation(populationSize, exclusivity);
+            for (int[] route : newPopulation) {
+
+                int[] parameters = mutation.bestRoute(graph, route, numberOfVertex, memeticType);
+
+                if (parameters[0] != -1 && parameters[1] != -1) {
+
+                    if (memeticType == 0)
+                        route = mutation.insertRoute(route, parameters[0], parameters[1]);
+                    else if (memeticType == 1)
+                        route = mutation.swapRoute(route, parameters[0], parameters[1]);
+                    else
+                        route = mutation.reverseRoute(route, parameters[0], parameters[1]);
+
+                    route[route.length - 1] = utils.getRouteCost(graph, route);
+
+                }
+
+            }
+
+            clearPopulation(population.size(), exclusivity);
 
             population.addAll(newPopulation);
 
             for (int[] route : population) {
 
-                if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
-
+                if (route[route.length - 1] < bestRoute[bestRoute.length - 1])
                     bestRoute = route.clone();
-
-                }
 
             }
 

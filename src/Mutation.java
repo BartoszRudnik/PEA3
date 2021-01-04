@@ -1,5 +1,13 @@
 public class Mutation {
 
+    UtilsFunction utils = new UtilsFunction();
+
+    public Mutation(int numberOfVertex) {
+
+        utils.setNumberOfVertex(numberOfVertex);
+
+    }
+
     public int[] reverseRoute(int[] route, int i, int j) {
 
         int[] index = getIndex(route, i, j);
@@ -31,6 +39,44 @@ public class Mutation {
         }
 
         return route;
+
+    }
+
+    public int[] bestRoute(int[][] graph, int[] route, int numberOfVertex, int mutationType) {
+
+        int[] parameters = new int[2];
+        parameters[0] = -1;
+        parameters[1] = -1;
+        int bestCost = route[route.length - 1];
+
+        for (int i = 1; i < numberOfVertex - 1; i++) {
+
+            for (int j = i + 1; j < numberOfVertex; j++) {
+
+                int[] newRoute = route.clone();
+
+                if (mutationType == 0)
+                    newRoute = insertRoute(newRoute, i, j);
+                else if (mutationType == 1)
+                    newRoute = swapRoute(newRoute, i, j);
+                else
+                    newRoute = reverseRoute(newRoute, i, j);
+
+                newRoute[newRoute.length - 1] = utils.getRouteCost(graph, newRoute);
+
+                if (newRoute[newRoute.length - 1] < bestCost) {
+
+                    bestCost = newRoute[newRoute.length - 1];
+                    parameters[0] = i;
+                    parameters[1] = j;
+
+                }
+
+            }
+
+        }
+
+        return parameters;
 
     }
 

@@ -36,7 +36,7 @@ public class Selection {
             int actualBestCost = Integer.MAX_VALUE;
             boolean[] test = new boolean[populationSize];
 
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < n; i++) {
 
                 int randomIndex = random.nextInt(populationSize - 1);
 

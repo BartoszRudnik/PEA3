@@ -12,6 +12,7 @@ public class TestUi {
     private int selectionType = 0;
     private int crossoverType = 0;
     private int mutationType = 0;
+    private int memeticType = 0;
     private double mutationChance = 0.15;
 
     private boolean spr = true;
@@ -32,7 +33,8 @@ public class TestUi {
             System.out.println("7. Ustaw rodzaj krzyzowania");
             System.out.println("8. Ustaw szanse na mutacje");
             System.out.println("9. Ustaw rodzaj mutacji");
-            System.out.println("10. Sprawdz aktualne ustawienia");
+            System.out.println("10. Ustaw memetic type");
+            System.out.println("11. Sprawdz aktualne ustawienia");
             System.out.println("0. Wyjdz");
 
             int opNr = scanner.nextInt();
@@ -46,7 +48,7 @@ public class TestUi {
                         if (numberOfVertex == 0)
                             throw new Exception();
 
-                        genetic.algorithm(graph, numberOfVertex, seconds, populationSize, exclusivity, selectionType, crossoverType, mutationChance, mutationType);
+                        genetic.algorithm(graph, numberOfVertex, seconds, populationSize, exclusivity, selectionType, crossoverType, mutationChance, mutationType, memeticType);
                         System.out.println();
 
                     } catch (Exception ex) {
@@ -198,6 +200,27 @@ public class TestUi {
                     }
                 }
                 case 10 -> {
+                    System.out.println("Podaj memetic type: ");
+                    System.out.println("_______________");
+                    System.out.println("0. Insert");
+                    System.out.println("1. Swap");
+                    System.out.println("2. Reverse");
+                    System.out.println("_______________");
+                    try {
+
+                        scanner.nextLine();
+                        memeticType = scanner.nextInt();
+
+                        if (memeticType < 0 || memeticType > 2) {
+                            memeticType = 0;
+                            throw new Exception();
+                        }
+
+                    } catch (Exception ex) {
+                        System.out.println("Podano bledna wartosc");
+                    }
+                }
+                case 11 -> {
                     System.out.println("---------------------------");
                     System.out.println("Aktualne ustawienia: ");
                     System.out.println("Liczba wierzcholkow grafu: " + numberOfVertex);
@@ -208,6 +231,7 @@ public class TestUi {
                     System.out.println("Rodzaj krzyzowania: " + crossoverType);
                     System.out.println("Szansa na mutacje: " + mutationChance);
                     System.out.println("Rodzaj mutacji: " + mutationType);
+                    System.out.println("Memetic type: " + memeticType);
                     System.out.println("---------------------------");
                 }
                 default -> System.out.println("Wybrano bledna operacje");
