@@ -92,7 +92,7 @@ public class Genetic {
 
     }
 
-    public void algorithm(int[][] graph, int numberOfVertex, int seconds, int populationSize, int exclusivity, int selectionType, int crossoverType, double mutationChance, int mutationType, int memeticType) {
+    public void algorithm(int[][] graph, int numberOfVertex, int seconds, int populationSize, int exclusivity, int selectionType, int crossoverType, double mutationChance, int mutationType, int memeticType, double crossoverChance, boolean memetic) {
 
         Random random = new Random();
         Crossover crossover = new Crossover(numberOfVertex);
@@ -123,74 +123,80 @@ public class Genetic {
 
             List<int[]> newPopulation = new ArrayList<>();
 
-            for (int i = 0; i < (populationSize - exclusivity) / 2; i++) {
+            while (newPopulation.size() < (populationSize - exclusivity)) {
 
-                int[] child1;
-                int[] child2;
+                double chance = random.nextDouble();
 
-                if (selectionType == 0) {
+                if (crossoverChance >= chance) {
 
-                    firstParent = selection.tournament(numberOfVertex, population.size(), 2);
-                    secondParent = selection.tournament(numberOfVertex, population.size(), 2);
+                    int[] child1;
+                    int[] child2;
 
-                } else if (selectionType == 1) {
+                    if (selectionType == 0) {
 
-                    firstParent = selection.roulette(population.size());
-                    secondParent = selection.roulette(population.size());
+                        firstParent = selection.tournament(numberOfVertex, population.size(), 2);
+                        secondParent = selection.tournament(numberOfVertex, population.size(), 2);
 
-                } else {
+                    } else if (selectionType == 1) {
 
-                    firstParent = selection.ranking(population.size());
-                    secondParent = selection.ranking(population.size());
+                        firstParent = selection.roulette(population.size());
+                        secondParent = selection.roulette(population.size());
+
+                    } else {
+
+                        firstParent = selection.ranking(population.size());
+                        secondParent = selection.ranking(population.size());
+
+                    }
+
+                    if (crossoverType == 0) {
+
+                        child1 = crossover.twoPoint(graph, firstParent, secondParent, numberOfVertex);
+                        child2 = crossover.twoPoint(graph, secondParent, firstParent, numberOfVertex);
+
+                    } else if (crossoverType == 1) {
+
+                        child1 = crossover.order(graph, firstParent, secondParent, numberOfVertex);
+                        child2 = crossover.order(graph, secondParent, firstParent, numberOfVertex);
+
+                    } else if (crossoverType == 2) {
+
+                        child1 = crossover.partiallyMapped(graph, firstParent, secondParent, numberOfVertex);
+                        child2 = crossover.partiallyMapped(graph, secondParent, firstParent, numberOfVertex);
+
+                    } else if (crossoverType == 3) {
+
+                        child1 = crossover.cycle(graph, firstParent, secondParent, numberOfVertex);
+                        child2 = crossover.cycle(graph, secondParent, firstParent, numberOfVertex);
+
+                    } else if (crossoverType == 4) {
+
+                        int[][] children = crossover.cycle2(graph, firstParent, secondParent, numberOfVertex);
+
+                        child1 = children[0];
+                        child2 = children[1];
+
+                    } else if (crossoverType == 5) {
+
+                        child1 = crossover.sequentialConstructive(graph, firstParent, secondParent, numberOfVertex);
+                        child2 = crossover.sequentialConstructive(graph, secondParent, firstParent, numberOfVertex);
+
+                    } else if (crossoverType == 6) {
+
+                        child1 = crossover.enhancedSequentialConstructive(graph, firstParent, secondParent, numberOfVertex);
+                        child2 = crossover.enhancedSequentialConstructive(graph, secondParent, firstParent, numberOfVertex);
+
+                    } else {
+
+                        child1 = crossover.singlePoint(graph, firstParent, secondParent, numberOfVertex);
+                        child2 = crossover.singlePoint(graph, secondParent, firstParent, numberOfVertex);
+
+                    }
+
+                    newPopulation.add(child1);
+                    newPopulation.add(child2);
 
                 }
-
-                if (crossoverType == 0) {
-
-                    child1 = crossover.twoPoint(graph, firstParent, secondParent, numberOfVertex);
-                    child2 = crossover.twoPoint(graph, secondParent, firstParent, numberOfVertex);
-
-                } else if (crossoverType == 1) {
-
-                    child1 = crossover.order(graph, firstParent, secondParent, numberOfVertex);
-                    child2 = crossover.order(graph, secondParent, firstParent, numberOfVertex);
-
-                } else if (crossoverType == 2) {
-
-                    child1 = crossover.partiallyMapped(graph, firstParent, secondParent, numberOfVertex);
-                    child2 = crossover.partiallyMapped(graph, secondParent, firstParent, numberOfVertex);
-
-                } else if (crossoverType == 3) {
-
-                    child1 = crossover.cycle(graph, firstParent, secondParent, numberOfVertex);
-                    child2 = crossover.cycle(graph, secondParent, firstParent, numberOfVertex);
-
-                } else if (crossoverType == 4) {
-
-                    int[][] children = crossover.cycle2(graph, firstParent, secondParent, numberOfVertex);
-
-                    child1 = children[0];
-                    child2 = children[1];
-
-                } else if (crossoverType == 5) {
-
-                    child1 = crossover.sequentialConstructive(graph, firstParent, secondParent, numberOfVertex);
-                    child2 = crossover.sequentialConstructive(graph, secondParent, firstParent, numberOfVertex);
-
-                } else if (crossoverType == 6) {
-
-                    child1 = crossover.enhancedSequentialConstructive(graph, firstParent, secondParent, numberOfVertex);
-                    child2 = crossover.enhancedSequentialConstructive(graph, secondParent, firstParent, numberOfVertex);
-
-                } else {
-
-                    child1 = crossover.singlePoint(graph, firstParent, secondParent, numberOfVertex);
-                    child2 = crossover.singlePoint(graph, secondParent, firstParent, numberOfVertex);
-
-                }
-
-                newPopulation.add(child1);
-                newPopulation.add(child2);
 
             }
 
@@ -223,18 +229,22 @@ public class Genetic {
 
             }
 
-            for (int[] route : newPopulation) {
+            if (memetic) {
 
-                int[] parameters = mutation.bestRoute(graph, route, numberOfVertex, memeticType);
+                for (int[] route : newPopulation) {
 
-                if (memeticType == 0)
-                    route = mutation.insertRoute(route, parameters[0], parameters[1]);
-                else if (memeticType == 1)
-                    route = mutation.swapRoute(route, parameters[0], parameters[1]);
-                else
-                    route = mutation.reverseRoute(route, parameters[0], parameters[1]);
+                    int[] parameters = mutation.bestRoute(graph, route, numberOfVertex, memeticType);
 
-                route[route.length - 1] = utils.getRouteCost(graph, route);
+                    if (memeticType == 0)
+                        route = mutation.insertRoute(route, parameters[0], parameters[1]);
+                    else if (memeticType == 1)
+                        route = mutation.swapRoute(route, parameters[0], parameters[1]);
+                    else
+                        route = mutation.reverseRoute(route, parameters[0], parameters[1]);
+
+                    route[route.length - 1] = utils.getRouteCost(graph, route);
+
+                }
 
             }
 

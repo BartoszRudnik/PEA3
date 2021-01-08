@@ -13,7 +13,9 @@ public class TestUi {
     private int crossoverType = 0;
     private int mutationType = 0;
     private int memeticType = 0;
+    private double crossoverChance = 0.8;
     private double mutationChance = 0.15;
+    private boolean memetic = false;
 
     private boolean spr = true;
 
@@ -31,40 +33,48 @@ public class TestUi {
             System.out.println("5. Ustaw elitaryzm");
             System.out.println("6. Ustaw rodzaj selekcji rodzicow");
             System.out.println("7. Ustaw rodzaj krzyzowania");
-            System.out.println("8. Ustaw szanse na mutacje");
+            System.out.println("8. Ustaw szanse mutacji");
             System.out.println("9. Ustaw rodzaj mutacji");
             System.out.println("10. Ustaw memetic type");
-            System.out.println("11. Sprawdz aktualne ustawienia");
+            System.out.println("11. Ustaw szanse krzyzowania");
+            System.out.println("12. Czy wlaczyc memetic");
+            System.out.println("13. Sprawdz aktualne ustawienia");
+            System.out.println("14. Wyswietl wczytane dane");
             System.out.println("0. Wyjdz");
 
             int opNr = scanner.nextInt();
 
             switch (opNr) {
-                case 0 -> spr = false;
-                case 1 -> {
+                case 0:
+                    spr = false;
+                    break;
+
+                case 1:
                     Genetic genetic = new Genetic();
                     try {
 
                         if (numberOfVertex == 0)
                             throw new Exception();
 
-                        genetic.algorithm(graph, numberOfVertex, seconds, populationSize, exclusivity, selectionType, crossoverType, mutationChance, mutationType, memeticType);
+                        genetic.algorithm(graph, numberOfVertex, seconds, populationSize, exclusivity, selectionType, crossoverType, mutationChance, mutationType, memeticType, crossoverChance, memetic);
                         System.out.println();
 
                     } catch (Exception ex) {
                         System.out.println("Nie zostal wczytany graf");
                         ex.printStackTrace();
                     }
-                }
-                case 2 -> {
+                    break;
+
+                case 2:
                     System.out.println("Podaj nazwe pliku do wczytania");
                     scanner.nextLine();
                     String fileName = scanner.nextLine();
                     data.readData2(fileName);
                     graph = data.getGraph();
                     numberOfVertex = data.getV();
-                }
-                case 3 -> {
+                    break;
+
+                case 3:
                     System.out.println("Podaj czas wykonywania sie algorytmu w sekundach: ");
                     try {
 
@@ -81,8 +91,9 @@ public class TestUi {
                         System.out.println("Podano bledna wartosc");
 
                     }
-                }
-                case 4 -> {
+                    break;
+
+                case 4:
                     System.out.println("Podaj rozmiar populacji: ");
                     try {
 
@@ -97,8 +108,9 @@ public class TestUi {
                     } catch (Exception ex) {
                         System.out.println("Podano bledna wartosc");
                     }
-                }
-                case 5 -> {
+                    break;
+
+                case 5:
                     System.out.println("Podaj rozmiar elitaryzmu: ");
                     try {
 
@@ -113,8 +125,9 @@ public class TestUi {
                     } catch (Exception ex) {
                         System.out.println("Podano bledna wartosc");
                     }
-                }
-                case 6 -> {
+                    break;
+
+                case 6:
                     System.out.println("Podaj rodzaj selekcji rodzicow: ");
                     System.out.println("_______________");
                     System.out.println("0. Tournament");
@@ -134,8 +147,9 @@ public class TestUi {
                     } catch (Exception ex) {
                         System.out.println("Podano bledna wartosc");
                     }
-                }
-                case 7 -> {
+                    break;
+
+                case 7:
                     System.out.println("Podaj rodzaj krzyzowania: ");
                     System.out.println("_______________");
                     System.out.println("0. Two Point");
@@ -160,9 +174,10 @@ public class TestUi {
                     } catch (Exception ex) {
                         System.out.println("Podano bledna wartosc");
                     }
-                }
-                case 8 -> {
-                    System.out.println("Podaj szanse na mutacje: ");
+                    break;
+
+                case 8:
+                    System.out.println("Podaj szanse mutacji: ");
                     try {
 
                         scanner.nextLine();
@@ -176,8 +191,9 @@ public class TestUi {
                     } catch (Exception ex) {
                         System.out.println("Podano bledna wartosc");
                     }
-                }
-                case 9 -> {
+                    break;
+
+                case 9:
                     System.out.println("Wybierz rodzaj mutacji:");
                     System.out.println("_______________");
                     System.out.println("0. Insert");
@@ -198,8 +214,9 @@ public class TestUi {
                     } catch (Exception ex) {
                         System.out.println("Wybrano zly rodzaj sasiedztwa");
                     }
-                }
-                case 10 -> {
+                    break;
+
+                case 10:
                     System.out.println("Podaj memetic type: ");
                     System.out.println("_______________");
                     System.out.println("0. Insert");
@@ -219,8 +236,47 @@ public class TestUi {
                     } catch (Exception ex) {
                         System.out.println("Podano bledna wartosc");
                     }
-                }
-                case 11 -> {
+                    break;
+
+                case 11:
+                    System.out.println("Podaj szanse krzyzowania: ");
+                    try {
+
+                        scanner.nextLine();
+                        crossoverChance = scanner.nextDouble();
+
+                        if (crossoverChance < 0 || crossoverChance > 1) {
+                            crossoverChance = 0.80;
+                            throw new Exception();
+                        }
+
+                    } catch (Exception ex) {
+                        System.out.println("Podano bledna wartosc");
+                    }
+                    break;
+
+                case 12:
+                    System.out.println("1. TAK");
+                    System.out.println("2. NIE");
+
+                    try {
+
+                        scanner.nextLine();
+
+                        int tmp = scanner.nextInt();
+
+                        if (tmp == 1)
+                            memetic = true;
+                        else if (tmp == 2)
+                            memetic = false;
+                        else
+                            throw new Exception();
+
+                    } catch (Exception ex) {
+                        System.out.println("Podano bledna wartosc");
+                    }
+
+                case 13:
                     System.out.println("---------------------------");
                     System.out.println("Aktualne ustawienia: ");
                     System.out.println("Liczba wierzcholkow grafu: " + numberOfVertex);
@@ -232,9 +288,19 @@ public class TestUi {
                     System.out.println("Szansa na mutacje: " + mutationChance);
                     System.out.println("Rodzaj mutacji: " + mutationType);
                     System.out.println("Memetic type: " + memeticType);
+                    System.out.println("Memetic: " + memetic);
+                    System.out.println("Szansa krzyzowania: " + crossoverChance);
                     System.out.println("---------------------------");
-                }
-                default -> System.out.println("Wybrano bledna operacje");
+                    break;
+
+                case 14:
+                    data.printData();
+                    break;
+
+                default:
+                    System.out.println("Wybrano bledna operacje");
+                    break;
+
             }
 
         }
