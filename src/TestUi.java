@@ -276,6 +276,8 @@ public class TestUi {
                         System.out.println("Podano bledna wartosc");
                     }
 
+                    break;
+
                 case 13:
                     System.out.println("---------------------------");
                     System.out.println("Aktualne ustawienia: ");

@@ -14,19 +14,16 @@ public class DataReader {
         return this.v;
     }
 
-    public void saveResult(String fileName, long[] tab){
+    public void saveResult(String fileName, int[] route) {
 
-        try{
+        try {
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName,true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName, true));
 
-            for (long l : tab) {
+            for (int l : route)
+                bw.write(l + " ");
 
-                bw.write(Long.toString(l));
-                bw.newLine();
-
-            }
-
+            bw.newLine();
             bw.close();
 
 

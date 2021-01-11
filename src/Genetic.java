@@ -45,10 +45,10 @@ public class Genetic {
 
             route = new int[numberOfVertex + 2];
             newRoute = utils.randomGreedy(graph, n);
-            routeCost = utils.getRouteCost(graph, newRoute);
 
             System.arraycopy(newRoute, 0, route, 0, newRoute.length);
-            route[route.length - 1] = routeCost;
+            route[route.length - 1] = utils.getRouteCost(graph, route);
+            ;
 
             if (utils.checkRoute(route))
                 population.add(route);
@@ -64,10 +64,9 @@ public class Genetic {
 
             route = new int[numberOfVertex + 2];
             newRoute = utils.shuffleArray(newRoute);
-            routeCost = utils.getRouteCost(graph, newRoute);
 
             System.arraycopy(newRoute, 0, route, 0, newRoute.length);
-            route[route.length - 1] = routeCost;
+            route[route.length - 1] = utils.getRouteCost(graph, route);
 
             if (utils.checkRoute(route))
                 population.add(route);
@@ -92,7 +91,7 @@ public class Genetic {
 
     }
 
-    public void algorithm(int[][] graph, int numberOfVertex, int seconds, int populationSize, int exclusivity, int selectionType, int crossoverType, double mutationChance, int mutationType, int memeticType, double crossoverChance, boolean memetic) {
+    public int[] algorithm(int[][] graph, int numberOfVertex, int seconds, int populationSize, int exclusivity, int selectionType, int crossoverType, double mutationChance, int mutationType, int memeticType, double crossoverChance, boolean memetic) {
 
         Random random = new Random();
         Crossover crossover = new Crossover(numberOfVertex);
@@ -136,6 +135,7 @@ public class Genetic {
 
                         firstParent = selection.tournament(numberOfVertex, population.size(), 2);
                         secondParent = selection.tournament(numberOfVertex, population.size(), 2);
+
 
                     } else if (selectionType == 1) {
 
@@ -254,8 +254,11 @@ public class Genetic {
 
             for (int[] route : population) {
 
-                if (route[route.length - 1] < bestRoute[bestRoute.length - 1])
+                if (route[route.length - 1] < bestRoute[bestRoute.length - 1]) {
+
                     bestRoute = route.clone();
+
+                }
 
             }
 
@@ -263,6 +266,8 @@ public class Genetic {
 
         for (int i : bestRoute)
             System.out.print(i + " ");
+
+        return bestRoute;
 
     }
 
