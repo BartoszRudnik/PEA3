@@ -98,12 +98,12 @@ public class Genetic {
         Mutation mutation = new Mutation(numberOfVertex);
         Selection selection = new Selection(population);
 
-        long finishTime = System.currentTimeMillis() + seconds * 1000L;
-
         int[] bestRoute = new int[numberOfVertex + 2];
         bestRoute[bestRoute.length - 1] = Integer.MAX_VALUE;
 
         generatePopulation(graph, numberOfVertex, populationSize);
+
+        long finishTime = System.currentTimeMillis() + seconds * 1000L;
 
         for (int[] route : population) {
 
@@ -126,28 +126,28 @@ public class Genetic {
 
                 double chance = random.nextDouble();
 
+                int[] child1;
+                int[] child2;
+
+                if (selectionType == 0) {
+
+                    firstParent = selection.tournament(numberOfVertex, population.size(), 2);
+                    secondParent = selection.tournament(numberOfVertex, population.size(), 2);
+
+
+                } else if (selectionType == 1) {
+
+                    firstParent = selection.roulette(population.size());
+                    secondParent = selection.roulette(population.size());
+
+                } else {
+
+                    firstParent = selection.ranking(population.size());
+                    secondParent = selection.ranking(population.size());
+
+                }
+
                 if (crossoverChance >= chance) {
-
-                    int[] child1;
-                    int[] child2;
-
-                    if (selectionType == 0) {
-
-                        firstParent = selection.tournament(numberOfVertex, population.size(), 2);
-                        secondParent = selection.tournament(numberOfVertex, population.size(), 2);
-
-
-                    } else if (selectionType == 1) {
-
-                        firstParent = selection.roulette(population.size());
-                        secondParent = selection.roulette(population.size());
-
-                    } else {
-
-                        firstParent = selection.ranking(population.size());
-                        secondParent = selection.ranking(population.size());
-
-                    }
 
                     if (crossoverType == 0) {
 
