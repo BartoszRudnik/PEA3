@@ -23,6 +23,10 @@ public class Selection {
         toSort.sort(Comparator.comparingInt(o -> o[o.length - 1]));
     }
 
+    //algorytm selekcji turniejowej
+    //tworzonych jest n turniejow, do kazdego turnieju losowanych jest n osobnikow,
+    //turniej wygrywa osobnik o najmniejszym koszcie przejscia,
+    //nastepnie z puli zwyciezcow turniejow wybierany jest najlepszy osobnik
     public int[] tournament(int numberOfVertex, int populationSize, int n) {
 
         Random random = new Random();
@@ -70,6 +74,11 @@ public class Selection {
 
     }
 
+    //selekcja rankingowa
+    //dla kazdego z osobnikow nalezacych do populacji obliczany jest wspolczynnik zdatnosci
+    //nastepnie populacja jest sortowana od osobnika o najwiekszym wspolczynniku zdatnosci do osobnika o najmniejszym
+    //wspolczynniku zdatnosci, w kolejnym kroku prawdopodobienstwo wyboru danego osobnika ustalane jest wylacznie
+    //na podstawie miejsca w rankingu tego osobnika
     public int[] ranking(int populationSize) {
 
         Random random = new Random();
@@ -119,6 +128,10 @@ public class Selection {
 
     }
 
+    //selekcja kola ruletki
+    //podobnie jak przy selekcji rankingowej dla kazdego z osobnikow obliczany jest wspolczynnik zdatnosci i wykonywane jest sortowanie
+    //nastepnie prawdopodobienstwo wyboru danego osobnika ustalane jest na podstawie wspolczynnika zdatnosci tego osobnika
+    //im wyzszy wspolczynnik zdatnosci tym wieksza szansa na wybor tego osobnika
     public int[] roulette(int populationSize) {
 
         Random random = new Random();

@@ -8,6 +8,8 @@ public class Mutation {
 
     }
 
+    // odwrocenie kolejnosci wystepowania elementow w tablicy pomiedzy elementami o wartosci 'i' oraz 'j', łącznie
+    // z elementem 'i' oraz 'j'
     public int[] reverseRoute(int[] route, int i, int j) {
 
         int[] index = getIndex(route, i, j);
@@ -42,6 +44,9 @@ public class Mutation {
 
     }
 
+    //funkcja wykorzystywana w algorytmie memetycznym
+    //przeszukuje sasiedztwo zadanego osobnika i zwraca parametry, dla ktorych mozliwe jest uzyskanie
+    //najkorzystniejszej wartosci
     public int[] bestRoute(int[][] graph, int[] route, int numberOfVertex, int mutationType) {
 
         int[] parameters = new int[2];
@@ -53,6 +58,7 @@ public class Mutation {
 
                 int[] newRoute = route.clone();
 
+                //przeszukiwanie z wykorzystaniem zadanego algorytmu mutacji
                 if (mutationType == 0)
                     newRoute = insertRoute(newRoute, i, j);
                 else if (mutationType == 1)
@@ -78,6 +84,7 @@ public class Mutation {
 
     }
 
+    // zamiana miejscami w tablicy elementu o wartosci 'i' z elementem o wartosci 'j'
     public int[] swapRoute(int[] route, int i, int j) {
 
         int[] index = getIndex(route, i, j);
@@ -93,6 +100,7 @@ public class Mutation {
 
     }
 
+    // wstawienie wierzcholka 'i' na pozycje o indeksie 'j'
     public int[] insertRoute(int[] route, int i, int j) {
 
         int indexI = 0;

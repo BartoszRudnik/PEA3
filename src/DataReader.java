@@ -28,7 +28,7 @@ public class DataReader {
 
 
         } catch (IOException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
 
     }
@@ -51,7 +51,7 @@ public class DataReader {
             bw.close();
 
         } catch (IOException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
 
     }
@@ -192,8 +192,7 @@ public class DataReader {
 
             line = line.substring(11);
 
-            if(line != null)
-                v = Integer.parseInt(line);
+            v = Integer.parseInt(line);
 
             graph = new int[v][v];
 
