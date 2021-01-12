@@ -24,12 +24,15 @@ public class Crossover {
 
         Random random = new Random();
 
+        //wyznaczamy punkt podzialu
         int border = random.nextInt(numberOfVertex - 2) + 1;
 
+        //kopiujemy do dziecka z pierwszego rodzica elementy z indeksow [1, border]
         System.arraycopy(firstParent, 1, child, 1, border);
 
         int index = border + 1;
 
+        //nastepnie uzepelniamy dziecko takimi elementami z drugiego rodzica, ktore nie zostaly skopiowane z pierwszego rodzica
         for (int i = 0; i < numberOfVertex; i++) {
 
             boolean add = true;
@@ -57,8 +60,10 @@ public class Crossover {
 
         }
 
+        //dodajemy '0' na poczatek i koniec sciezki
         child[0] = 0;
         child[child.length - 2] = 0;
+        //obliczamy koszt przejscia sciezki
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return child;
@@ -69,6 +74,7 @@ public class Crossover {
 
         int[] child = new int[firstParent.length];
 
+        //wyznaczamy indeksy wedlug ktorych stworzona zostanie sekcja dopasowania dla pierwszego rodzica
         Random random = new Random();
         int i = 0;
         int j = 0;
@@ -88,6 +94,7 @@ public class Crossover {
 
         }
 
+        //zapamietujemy wierzcholki, ktore znalazly sie w sekcji dopasowania pierwszego rodzica
         int[] chosenVertexes = new int[i - j + 1];
         int tmpIndex = 0;
 
@@ -98,6 +105,8 @@ public class Crossover {
 
         }
 
+        //tworzymy dziecko poprzez usuniecie z drugiego rodzica wierzcholkow nalezacych do sekcji dopasowania pierwszego rodzica
+        //wierzcholki, ktore nie zostaly usuniete z drugiego rodzica przesuwamy na poczatek sciezki
         tmpIndex = 0;
 
         for (int start = 0; start < firstParent.length - 2; start++) {
@@ -118,6 +127,7 @@ public class Crossover {
 
         }
 
+        //na koniec sciezki dodajemy wierzcholki nalezace do sekcji dopasowania pierwszego rodzica
         int tmpIndex2 = chosenVertexes.length - 1;
 
         for (int start = tmpIndex; start < firstParent.length - 2; start++) {
@@ -128,6 +138,7 @@ public class Crossover {
         }
 
         child[child.length - 2] = 0;
+        //obliczamy koszt przejscia stworzonej sciezki
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return child;
@@ -138,6 +149,7 @@ public class Crossover {
 
         int[] child = new int[numberOfVertex + 2];
 
+        //losujemy dwa indeksy pomiedzy ktorymi stworzona zostanie sekcja dopasowania
         Random random = new Random();
         int i = 0;
         int j = 0;
@@ -157,6 +169,7 @@ public class Crossover {
 
         }
 
+        //zapamietujemy wierzcholki nalezace do sekcji dopasowania pierwszego rodzica
         int[] chosenVertexes = new int[i - j + 1];
         int tmpIndex = 0;
 
@@ -176,6 +189,9 @@ public class Crossover {
         if (tmpIndex2 == secondParent.length - 2)
             tmpIndex2 = 1;
 
+        //nastepnie kopiujemy do dziecka wierzcholki nie wystepujace do tej pory w dziecku,
+        //nalezace do drugiego rodzica, zaczynajac od wierzcholka znajdujacego
+        //sie na pozycji (i + 1), gdzie i to koncowy indeks sekcji dopasowania
         for (int k = 0; k < numberOfVertex; k++) {
 
             int tmpVertex = secondParent[tmpIndex2];
@@ -214,8 +230,10 @@ public class Crossover {
 
         }
 
+        //dodajemy wierzcholek poczatkowy i koncowy
         child[0] = 0;
         child[child.length - 2] = 0;
+        //obliczamy koszt przejscia stworzonej sciezki
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return child;
@@ -226,6 +244,7 @@ public class Crossover {
 
         int[] child = new int[numberOfVertex + 2];
 
+        //wyznaczamy dwa indeksy na podstawie ktorych stworzona zostanie sekcja dopasowania
         Random random = new Random();
         int i = 0;
         int j = 0;
@@ -245,6 +264,8 @@ public class Crossover {
 
         }
 
+        //zapamietujemy wierzcholki drugiego rodzica, ktore naleza do sekcji dopasowania
+        //wierzcholki te beda skopiowane do dziecka
         int[] chosenVertexes = new int[i - j + 1];
         int tmpIndex = 0;
 
@@ -256,6 +277,8 @@ public class Crossover {
 
         }
 
+        //przegladamy wierzcholki pierwszego rodzica, ktore nie naleza do sekcji dopasowania,
+        //jesli nie zachodza konflikty to umieszczamy je w dziecku
         for (int k = 1; k < numberOfVertex; k++) {
 
             boolean test = true;
@@ -309,13 +332,16 @@ public class Crossover {
 
         }
 
+        //dodajemy wierzcholek startowy i koncowy
         child[0] = 0;
         child[child.length - 2] = 0;
+        //obliczamy koszt przejscia stworzonego dziecka
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return child;
 
     }
+
 
     public int[] cycle(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
 
@@ -325,6 +351,11 @@ public class Crossover {
         int first = firstParent[index];
         child[1] = firstParent[index];
 
+        //najpierw do dziecka kopiujemy pierwszy wierzcholek znajdujacy sie w pierwszym rodzicu
+        //nastepnie sprawdzamy, ktory wierzcholek w rodzicu drugim znajduje sie na pozycji o tym samym indeksie,
+        //kolejnym krokiem jest odnalezenie tego wierzcholka w rodzicu pierwszym i wstawienie go do dziecka na ta sama
+        //pozycje, w ktorej jest umieszczony w rodzicu pierwszym
+        //powtarzamy te kroki az do momentu wystapienia cyklu
         while (true) {
 
             int actual = secondParent[index];
@@ -345,6 +376,8 @@ public class Crossover {
 
         }
 
+        //nastepnie na puste pozycje w dziecku umieszczamy wierzcholki znajdujace sie na odpowiadajacych im
+        //pozycjom wierzcholkom w drugim rodzicu
         for (int i = 1; i < numberOfVertex; i++) {
 
             if (child[i] == 0)
@@ -352,8 +385,10 @@ public class Crossover {
 
         }
 
+        //uzupelniamy wierzcholek startowy i koncowy
         child[0] = 0;
         child[child.length - 2] = 0;
+        //obliczamy koszt przejscia stworzonego dziecka
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return child;
@@ -367,6 +402,7 @@ public class Crossover {
 
         int[][] returnChildren = new int[2][numberOfVertex + 2];
 
+        //kopiujemy pierwszy wierzcholek drugiego rodzica jako pierwszy wierzcholek pierwszego dziecka
         int position = 1;
         int firstBit = firstParent[1];
         child[position] = secondParent[1];
@@ -375,8 +411,12 @@ public class Crossover {
         boolean test = true;
         boolean condition = true;
 
+        //dopoki pierwszy wierzcholek pierwszego rodzica nie zostanie umieszczony w drugim dziecku
         while (condition) {
 
+            //znajdujemy pierwszy wierzcholek drugiego rodzica w pierwszym rodzicu i wybieramy z tej samej pozycji
+            //wierzcholek z drugiego rodzica i odnajdujemy go w pierwszym rodzicu i umieszczamy w drugim dziecku
+            //powtarzamy czynnosci az do spelnienia warunku 'condition'
             do {
 
                 for (int j = 0; j < 3; j++) {
@@ -421,6 +461,8 @@ public class Crossover {
 
             } while (true);
 
+
+            //uzupelniamy wierzcholki brakujace w dzieciach
             for (int i = 1; i < numberOfVertex; i++) {
 
                 boolean check = true;
@@ -496,6 +538,7 @@ public class Crossover {
 
         }
 
+        //uzupelniamy wierzcholek startowy i koncowy oraz obliczamy koszt przejscia wytworzonych dzieci
         child[0] = 0;
         child[child.length - 2] = 0;
         child[child.length - 1] = utils.getRouteCost(graph, child);
@@ -517,6 +560,7 @@ public class Crossover {
 
         int position = 1;
 
+        //dodajemy do dziecka pierwszy wierzcholek pierwszego rodzica
         int addNode = firstParent[position];
         int firstNode;
         int secondNode;
@@ -527,6 +571,10 @@ public class Crossover {
         child[position] = addNode;
         position++;
 
+        //wyszukujemy w obu rodzicach wierzcholki wystepujace po ostatnio dodanym do dziecka wierzcholku (jesli nie ma takich
+        //wierzcholkow wybieramy pierwszy z kolei nie dodany jeszcze wierzcholek)
+        //nastepnie sprawdzamy w zadanym grafie wejsciowym, ktore z dwoch przejsc jest tansze i dodajemy do dziecka
+        //wierzcholek odpowiadajacy temu przejsciu
         while (position < numberOfVertex) {
 
             firstParentIndex = sequentialIndex(numberOfVertex, firstParent, addNode);
@@ -551,13 +599,16 @@ public class Crossover {
 
         }
 
+        //dodajemy wierzcholek koncowy i poczatkowy
         child[0] = 0;
         child[child.length - 2] = 0;
+        //dodajemy koszt przejscia utworzonego dziecka
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return child;
 
     }
+
 
     public int[] enhancedSequentialConstructive(int[][] graph, int[] firstParent, int[] secondParent, int numberOfVertex) {
 
@@ -565,6 +616,7 @@ public class Crossover {
 
         int position = 1;
 
+        //dodajemy do dziecka pierwszy wierzcholek pierwszego rodzica
         int addNode = firstParent[position];
         int firstNode;
         int secondNode;
@@ -575,7 +627,10 @@ public class Crossover {
         child[position] = addNode;
         position++;
 
+        //dopoki nie dodamy wszystkich wierzcholkow do dziecka
         while (position < numberOfVertex) {
+
+            //znajdujemy w pierwszym i drugim rodzicu wierzcholki wystepujace po ostatnim dodanym do dziecka wierzcholku
 
             firstParentIndex = sequentialIndex(numberOfVertex, firstParent, addNode);
             secondParentIndex = sequentialIndex(numberOfVertex, secondParent, addNode);
@@ -583,9 +638,14 @@ public class Crossover {
             firstNode = sequentialNode(numberOfVertex, firstParentIndex, position, firstParent, child);
             secondNode = sequentialNode(numberOfVertex, secondParentIndex, position, secondParent, child);
 
+            //obliczamy najtanszy koszt przejscia z pierwszego rozpatrywanego wierzcholka do dowolnego nieodwiedzonego jeszcze wierzcholka
             int firstParentMin = minRowValue(firstNode, graph, numberOfVertex, child);
+            //obliczamy najtanszy koszt przejscia z drugiego ropzatrywanego wierzcholka do dowolnego nieodwiedzonego jeszcze wierzcholka
             int secondParentMin = minRowValue(secondNode, graph, numberOfVertex, child);
 
+            //obliczamy sume kosztu przejscia z ostatnio dodanego wierzcholka do pierwszego rozpatrywanego wierzcholka i najtanszy koszt przejscia z pierwszego rozpatrywanego wierzcholka do nieodwiedzonego jeszcze wierzcholka
+            //obliczamy sume kosztu przejscia z ostatnio dodanego wierzcholka do drugiego rozpatrywanego wierzcholka i najtanszy koszt przejscia z drugiego rozpatrywanego wierzcholka do nieodwiedzonego jeszcze wierzcholka
+            //rozwazany wierzcholek dla ktorego suma jest mniejsza dodawany jest do dziecka
             if (graph[addNode][firstNode] + firstParentMin < graph[addNode][secondNode] + secondParentMin) {
 
                 child[position] = firstNode;
@@ -602,8 +662,10 @@ public class Crossover {
 
         }
 
+        //dodajemy wierzcholek startowy i koncowy
         child[0] = 0;
         child[child.length - 2] = 0;
+        //obliczamy koszt przejscia stworzonego dziecka
         child[child.length - 1] = utils.getRouteCost(graph, child);
 
         return child;
