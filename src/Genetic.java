@@ -62,6 +62,11 @@ public class Genetic {
 
         int randomSize = populationSize - rGreedySize - 1;
 
+        newRoute = new int[numberOfVertex];
+
+        for (int i = 0; i < numberOfVertex; i++)
+            newRoute[i] = i;
+
         for (int i = 0; i < randomSize; i++) {
 
             route = new int[numberOfVertex + 2];

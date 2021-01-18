@@ -12,7 +12,7 @@ public class UI {
         while (true) {
 
             System.out.println("1. Testowanie");
-            System.out.println("2. Pomiary");
+            //System.out.println("2. Pomiary");
             System.out.println("0. Zakoncz");
 
             int nrOperacji = scanner.nextInt();

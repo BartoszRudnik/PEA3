@@ -153,19 +153,19 @@ public class UtilsFunction {
 
     }
 
-    public int [] shuffleArray(int[] array)
-    {
+    public int[] shuffleArray(int[] array) {
+
         int index, temp;
         Random random = new Random();
 
-        int [] tmpArray = new int[array.length - 2];
+        int[] tmpArray = new int[array.length - 2];
 
         if (tmpArray.length >= 0)
             System.arraycopy(array, 1, tmpArray, 0, tmpArray.length);
 
         for (int i = tmpArray.length - 1; i > 0; i--)
         {
-            index = random.nextInt(i + 1);
+            index = random.nextInt(i);
             temp = tmpArray[index];
             tmpArray[index] = tmpArray[i];
             tmpArray[i] = temp;
